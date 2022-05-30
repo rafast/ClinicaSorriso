@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace ClinicaSorriso.Models
 {
     public class Consulta
@@ -14,6 +15,11 @@ namespace ClinicaSorriso.Models
             Data = data;
             HoraInicio = horaInicio;
             HoraFim = horaFim;
+        }
+        public bool TemChoqueDeHorario(Consulta consulta) 
+        {
+            !(dataHoraInicio > intervalo.dataHoraFinal || dataHoraFinal < intervalo.dataHoraInicio);
+
         }
     }
 }

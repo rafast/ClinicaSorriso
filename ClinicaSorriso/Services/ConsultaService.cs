@@ -1,4 +1,5 @@
-﻿using ClinicaSorriso.Models;
+﻿
+using ClinicaSorriso.Models;
 using ClinicaSorriso.Repositories.InMemory;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,11 @@ namespace ClinicaSorriso.Services
         public List<Consulta> ListarConsultas()
         {
             return _consultaRepositoryInMemory.ListarTodos().OrderBy(c => c.Data).ToList();
+        }
+
+        public List<Consulta> ListarConsultasDoDia(DateTime dataHj)
+        {
+            return _consultaRepositoryInMemory.ListarTodos().Where(c => c.Data == dataHj).ToList();
         }
     }
 }
