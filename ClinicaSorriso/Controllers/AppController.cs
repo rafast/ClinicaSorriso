@@ -6,11 +6,12 @@ namespace ClinicaSorriso.Controllers
     public class AppController
     {
         public PacienteController pacienteController { get; set; }
-        public ConsultaController consultaController { get; set; } = new ConsultaController();
+        public ConsultaController consultaController { get; set; }
 
-        public AppController(PacienteController pacienteController)
+        public AppController(PacienteController pacienteController, ConsultaController consultaController)
         {
             this.pacienteController = pacienteController;
+            this.consultaController = consultaController;
         }
 
         public void LerOpcaoUsuario()

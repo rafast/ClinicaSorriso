@@ -10,12 +10,15 @@ namespace ClinicaSorriso
     {
         public static void Main(string[] args)
         {
-            //var pacienteController = new PacienteController();
-            //pacienteController.Cadastrar();
             PacientesRepositoryInMemory pacientesRepositoryInMemory = new PacientesRepositoryInMemory();
             PacienteService pacienteService = new PacienteService(pacientesRepositoryInMemory); 
             PacienteController pacienteController = new PacienteController(pacienteService);
-            AppController app = new AppController(pacienteController);
+
+            ConsultaRepositoryInMemory consultaRepositoryInMemory = new ConsultaRepositoryInMemory();
+            ConsultaService consultaService = new ConsultaService(consultaRepositoryInMemory);
+            ConsultaController consultaController = new ConsultaController(consultaService, pacienteService);
+
+            AppController app = new AppController(pacienteController, consultaController);
             MenuView.MenuPrincipal();
             app.LerOpcaoUsuario();
         }
