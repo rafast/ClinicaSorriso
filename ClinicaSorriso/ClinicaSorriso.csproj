@@ -46,6 +46,7 @@
     <Compile Include="Repositories\InMemory\PacientesRepositoryInMemory.cs" />
     <Compile Include="Services\PacienteService.cs" />
     <Compile Include="Helpers\ValidadorConsulta.cs" />
+    <Compile Include="Repositories\InMemory\ConsultaRepositoryInMemory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
