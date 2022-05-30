@@ -20,6 +20,6 @@ namespace ClinicaSorriso.Models
         {
             !(dataHoraInicio > intervalo.dataHoraFinal || dataHoraFinal < intervalo.dataHoraInicio);
 
-        } adsdas lucas */
+        } adsdas lucas rafael */
     }
 }
