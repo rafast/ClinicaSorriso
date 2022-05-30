@@ -1,12 +1,17 @@
 ﻿using System;
+using ClinicaSorriso.Services;
 using ClinicaSorriso.Views;
 
 namespace ClinicaSorriso.Controllers
 {
     public class ConsultaController
     {
-        public ConsultaController()
+        private PacienteService _pacienteService { get; set; }
+        private ConsultaService _consultaService { get; set; }
+        public ConsultaController(ConsultaService consultaService, PacienteService pacienteService)
         {
+            _consultaService = consultaService;
+            _pacienteService = pacienteService;
         }
 
         public void LeituraOpcao()
@@ -20,7 +25,7 @@ namespace ClinicaSorriso.Controllers
                 {
                     case '1':
                         Console.WriteLine("Agendar consulta");
-                        //Cadastrar();
+                        Cadastrar();
                         break;
                     case '2':
                         Console.WriteLine("Cancelar agendamento");
@@ -43,7 +48,38 @@ namespace ClinicaSorriso.Controllers
                 }
 
             }
+        }
+        public void Cadastrar()
+        {
+            try
+            {
+                var pacienteSalvo = _pacienteService.ConsultarPacientePorCPF("");
+                if (pacienteSalvo == null)
+                {
+                    ConsultaView.PacienteInesxistente();
+                }
+                _consultaService.CadastrarConsulta(ConsultaView.Cadastrar());
+                Console.WriteLine("Agendamento realizado com sucesso!");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"Erro: {ex.Message}");
+            }
+        }
+
+        public void Excluir()
+        {
 
         }
+
+        /*
+        public void ListarPorCpf()
+        {
+            PacienteView.ListarPacientes(_pacienteService.ListarPacientesPorCPF());
+        }
+        public void ListarPorNome()
+        {
+            PacienteView.ListarPacientes(_pacienteService.ListarPacientesPorNome());
+        }*/
     }
 }
