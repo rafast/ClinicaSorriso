@@ -7,6 +7,7 @@ namespace ClinicaSorriso.Views
 {
     public static class ConsultaView
     {
+        private static string PacienteCpf { get; set; }
         public static void MenuAgenda()
         {
             Console.WriteLine("Agenda");
@@ -15,13 +16,12 @@ namespace ClinicaSorriso.Views
             Console.WriteLine("3-Listar agenda");
             Console.WriteLine("4-Voltar p/ menu principal");
         }
-        public static Consulta Cadastrar()
-        {
-            /*
-            Console.WriteLine("CPF: ");
-            string inputCpf = Console.ReadLine();*/
+        public static List<string> Cadastrar()
+        {  
+            List<string> DadosValidados = new List<string>();
+
             Console.Write("Data da consulta: ");
-            string inputData = Console.ReadLine();
+            string inputData = Console.ReadLine();    
             Console.Write("Horário do inicio da consulta(HH/mm): ");
             string inputHrInicio = Console.ReadLine();
             Console.Write("Horário do término da consulta(HH/mm): ");
@@ -46,8 +46,10 @@ namespace ClinicaSorriso.Views
                 }
                 validadorConsulta.ValidarDados();
             }
-
-            return new Consulta(validadorConsulta.Paciente, validadorConsulta.DataConsulta, validadorConsulta.HoraInicio, validadorConsulta.HoraFim);
+            DadosValidados.Add(validadorConsulta.DataConsulta.ToString());
+            DadosValidados.Add(validadorConsulta.HoraInicio);
+            DadosValidados.Add(validadorConsulta.HoraFim);
+            return DadosValidados;
         }
 
         public static void PacienteInesxistente()
@@ -55,6 +57,13 @@ namespace ClinicaSorriso.Views
             Console.WriteLine("Erro: paciente não cadastrado ");
         }
 
+        public static string ConsultarCpf()
+        {
+            Console.WriteLine("CPF: ");
+           PacienteCpf = Console.ReadLine();
+            return PacienteCpf;
+        }
+        
         public static void ListarPacientes(List<Paciente> pacientes)
         {
             if (pacientes.Count == 0)

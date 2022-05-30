@@ -1,4 +1,5 @@
 ﻿using System;
+using ClinicaSorriso.Models;
 using ClinicaSorriso.Services;
 using ClinicaSorriso.Views;
 
@@ -6,7 +7,7 @@ namespace ClinicaSorriso.Controllers
 {
     public class ConsultaController
     {
-        private PacienteService _pacienteService { get; set; }
+        private PacienteService _pacienteService  { get; set; }
         private ConsultaService _consultaService { get; set; }
         public ConsultaController(ConsultaService consultaService, PacienteService pacienteService)
         {
@@ -53,12 +54,14 @@ namespace ClinicaSorriso.Controllers
         {
             try
             {
-                var pacienteSalvo = _pacienteService.ConsultarPacientePorCPF("");
-                if (pacienteSalvo == null)
+                var pacienteSalvo = _pacienteService.ConsultarPacientePorCPF(ConsultaView.ConsultarCpf());
+                if(pacienteSalvo == null)
                 {
                     ConsultaView.PacienteInesxistente();
+                    return;
                 }
-                _consultaService.CadastrarConsulta(ConsultaView.Cadastrar());
+                var dadosConsulta = ConsultaView.Cadastrar();
+                var novaConsulta = new Consulta(pacienteSalvo, DateTime.Parse(dadosConsulta[0]), dadosConsulta[1], dadosConsulta[2]);
                 Console.WriteLine("Agendamento realizado com sucesso!");
             }
             catch (ArgumentException ex)
@@ -77,6 +80,7 @@ namespace ClinicaSorriso.Controllers
         {
             PacienteView.ListarPacientes(_pacienteService.ListarPacientesPorCPF());
         }
+
         public void ListarPorNome()
         {
             PacienteView.ListarPacientes(_pacienteService.ListarPacientesPorNome());

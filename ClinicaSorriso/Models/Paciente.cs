@@ -19,5 +19,10 @@ namespace ClinicaSorriso.Models
         {
             return DateTime.Today.Year - DataNascimento.Year;
         }
+
+        public void MarcarConsulta(Consulta consulta)
+        {
+            ConsultaMarcada = consulta;
+        }
     }
 }
