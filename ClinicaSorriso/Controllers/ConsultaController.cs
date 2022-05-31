@@ -9,10 +9,12 @@ namespace ClinicaSorriso.Controllers
     {
         private PacienteService _pacienteService  { get; set; }
         private ConsultaService _consultaService { get; set; }
+
         public ConsultaController(ConsultaService consultaService, PacienteService pacienteService)
         {
             _consultaService = consultaService;
             _pacienteService = pacienteService;
+            PopularAgenda();
         }
 
         public void LeituraOpcao()
@@ -33,8 +35,8 @@ namespace ClinicaSorriso.Controllers
                         //Excluir();
                         break;
                     case '3':
-                        Console.WriteLine("Listar agenda");
-                        //ListarPorCpf();
+                        Console.Clear();
+                        ListarAgenda();
                         break;
                     case '4':
                         Console.WriteLine("Voltar p/ menu principal");
@@ -62,6 +64,7 @@ namespace ClinicaSorriso.Controllers
                 }
                 var dadosConsulta = ConsultaView.Cadastrar();
                 var novaConsulta = new Consulta(pacienteSalvo, DateTime.Parse(dadosConsulta[0]), dadosConsulta[1], dadosConsulta[2]);
+                _consultaService.CadastrarConsulta(novaConsulta);
                 Console.WriteLine("Agendamento realizado com sucesso!");
             }
             catch (ArgumentException ex)
@@ -75,15 +78,30 @@ namespace ClinicaSorriso.Controllers
 
         }
 
-        /*
-        public void ListarPorCpf()
+        
+        public void ListarAgenda()
         {
-            PacienteView.ListarPacientes(_pacienteService.ListarPacientesPorCPF());
+            var opcaoListagem = ConsultaView.ObterOpcaoListagem();
+            Console.Clear();
+            if (opcaoListagem == 'T' || opcaoListagem == 't')
+            {
+                ConsultaView.ListarAgenda(_consultaService.ListarConsultas());
+            }
+            if (opcaoListagem == 'P'){
+
+            }
+            else
+            {
+                Console.WriteLine();
+            }
         }
 
-        public void ListarPorNome()
+        private void PopularAgenda()
         {
-            PacienteView.ListarPacientes(_pacienteService.ListarPacientesPorNome());
-        }*/
+            _consultaService.CadastrarConsulta(new Consulta(_pacienteService.ConsultarPacientePorCPF("39401787050"), Convert.ToDateTime("15/06/2022"), "08:00", "09:00"));
+            _consultaService.CadastrarConsulta(new Consulta(_pacienteService.ConsultarPacientePorCPF("80519936086"), Convert.ToDateTime("15/06/2022"), "10:15", "11:00"));
+            _consultaService.CadastrarConsulta(new Consulta(_pacienteService.ConsultarPacientePorCPF("91490575022"), Convert.ToDateTime("15/06/2022"), "13:45", "15:00"));            
+        }
+
     }
 }

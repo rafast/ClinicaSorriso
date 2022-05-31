@@ -60,7 +60,7 @@ namespace ClinicaSorriso.Views
         public static string ConsultarCpf()
         {
             Console.WriteLine("CPF: ");
-           PacienteCpf = Console.ReadLine();
+            PacienteCpf = Console.ReadLine();
             return PacienteCpf;
         }
         
@@ -77,6 +77,31 @@ namespace ClinicaSorriso.Views
             foreach (var paciente in pacientes)
             {
                 Console.WriteLine(String.Format("{0,-11} {1,-32} {2,-10} {3, 1}", paciente.Cpf, paciente.Nome, paciente.DataNascimento.ToString("dd/MM/yyyy"), paciente.GetIdade()));
+            }
+        }
+
+        public static char ObterOpcaoListagem()
+        {
+            Console.Write("Apresentar a agenda T-Toda ou P-Periodo: ");
+            var inputOpcaoListagem = Console.ReadKey();
+            return inputOpcaoListagem.KeyChar;
+        }
+
+        public static void ListarAgenda(List<Consulta> agenda)
+        {
+            if (agenda.Count == 0)
+            {
+                Console.WriteLine("Agenda vazia.");
+                return;
+            }
+            Console.WriteLine("------------------------------------------------------------");
+            Console.WriteLine("   Data    H.Ini H.Fim Tempo Nome                   Dt.Nasc.");
+            Console.WriteLine("------------------------------------------------------------");
+            foreach (var consulta in agenda)
+            {
+                Console.WriteLine(String.Format("{0,-10} {1,0} {2, 0} {3, 5} {4, -20} {5, 1}", consulta.Data.ToString("dd/MM/yyyy"), consulta.HoraInicio, consulta.HoraFim, consulta.HoraFim,
+                                        consulta.Paciente.Nome,
+                                        consulta.Paciente.DataNascimento.ToString("dd/MM/yyyy")));
             }
         }
     }

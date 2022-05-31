@@ -27,5 +27,6 @@ namespace ClinicaSorriso.Repositories.InMemory
         {
             return _consultaRepository;
         }
+        
     }
 }
