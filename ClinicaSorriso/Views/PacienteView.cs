@@ -19,6 +19,13 @@ namespace ClinicaSorriso.Views
             Console.WriteLine("5-Voltar p/ menu principal");
         }
 
+        public static string ConsultarCpf()
+        {
+            Console.Write("CPF: ");
+            var inputCpf = Console.ReadLine();
+            return inputCpf;
+        }
+
         public static Paciente Cadastrar()
         {
             Console.Write("CPF: ");

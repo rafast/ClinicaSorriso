@@ -17,7 +17,14 @@ namespace ClinicaSorriso.Models
 
         public int GetIdade()
         {
-            return DateTime.Today.Year - DataNascimento.Year;
+            var dataHoje = DateTime.Today;
+            var idade = dataHoje.Year - DataNascimento.Year;
+
+            if (DataNascimento > dataHoje.AddYears(-idade))
+            {
+                idade--;
+            }
+            return idade;
         }
 
         public void MarcarConsulta(Consulta consulta)
@@ -29,10 +36,7 @@ namespace ClinicaSorriso.Models
         {
             if (ConsultaMarcada != null)
             {
-                return ConsultaMarcada.Data > DateTime.Now;  
-
-
-
+                return ConsultaMarcada.Data > DateTime.Now;
             }
             return false;
         }

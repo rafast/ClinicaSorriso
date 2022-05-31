@@ -23,6 +23,11 @@ namespace ClinicaSorriso.Services
             {
                 throw new ArgumentException("CPF já cadastrado");
             }
+
+            if (paciente.GetIdade() < 13)
+            {
+                throw new ApplicationException("O dentista não atende crianças. A idade mínima para atendimento é de 13 anos.");
+            }
             _pacientesRepository.Salvar(paciente);
         }
 
@@ -35,7 +40,11 @@ namespace ClinicaSorriso.Services
 
         public void ExcluirPaciente(Paciente paciente)
         {
-            throw new NotImplementedException();
+            if (paciente.TemConsultaFutura())
+            {
+                throw new ApplicationException("O paciente possui uma consulta agendada futura.");
+            }
+            _pacientesRepository.Deletar(paciente);
         }
 
         public List<Paciente> ListarPacientesPorCPF()
