@@ -64,22 +64,6 @@ namespace ClinicaSorriso.Views
             return PacienteCpf;
         }
         
-        public static void ListarPacientes(List<Paciente> pacientes)
-        {
-            if (pacientes.Count == 0)
-            {
-                Console.WriteLine("Lista de pacientes vazia.");
-                return;
-            }
-            Console.WriteLine("------------------------------------------------------------");
-            Console.WriteLine("Data         Nome                              Dt.Nasc. Idade");
-            Console.WriteLine("------------------------------------------------------------");
-            foreach (var paciente in pacientes)
-            {
-                Console.WriteLine(String.Format("{0,-11} {1,-32} {2,-10} {3, 1}", paciente.Cpf, paciente.Nome, paciente.DataNascimento.ToString("dd/MM/yyyy"), paciente.GetIdade()));
-            }
-        }
-
         public static char ObterOpcaoListagem()
         {
             Console.Write("Apresentar a agenda T-Toda ou P-Periodo: ");
@@ -99,7 +83,7 @@ namespace ClinicaSorriso.Views
             Console.WriteLine("------------------------------------------------------------");
             foreach (var consulta in agenda)
             {
-                Console.WriteLine(String.Format("{0,-10} {1,0} {2, 0} {3, 5} {4, -20} {5, 1}", consulta.Data.ToString("dd/MM/yyyy"), consulta.HoraInicio, consulta.HoraFim, consulta.HoraFim,
+                Console.WriteLine(String.Format("{0,-10} {1,0} {2, 0} {3, 5} {4, -20} {5, 1}", consulta.Data.ToString("dd/MM/yyyy"), consulta.HoraInicio, consulta.HoraFim, consulta.TempoDeConsulta.ToString(@"hh\:mm"),
                                         consulta.Paciente.Nome,
                                         consulta.Paciente.DataNascimento.ToString("dd/MM/yyyy")));
             }

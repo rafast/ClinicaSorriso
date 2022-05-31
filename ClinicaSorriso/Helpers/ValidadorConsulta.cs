@@ -11,7 +11,6 @@ namespace ClinicaSorriso.Helpers
 {
     public class ValidadorConsulta
     {
-        public PacientesRepositoryInMemory Prepo { get; set; }
         public Dictionary<string, string> Erros { get; set; }
         public Paciente Paciente { get; set; }
         public string Data { get; set; }
@@ -40,10 +39,6 @@ namespace ClinicaSorriso.Helpers
         public void ValidarDados()
         {
             Erros.Clear();
-            /* if (!VinculaPaciente(Cpf))
-             {
-                 Erros.Add("Cpf", "cpf do paciente não esta cadastrado");
-             }*/
             if (!ValidaData())
             {
                 Erros.Add("Data", "Data inválida");
@@ -60,23 +55,6 @@ namespace ClinicaSorriso.Helpers
             }
         }
 
-        /*private bool VinculaPaciente(string cpf)
-        {
-            PacientesRepositoryInMemory Rp = Prepo;
-            Paciente pac = Rp.ListarTodos()
-                             .Where(p => p.Cpf == cpf)
-                             .SingleOrDefault();
-            if (pac == null)
-            {
-                return false;
-            }
-            else
-            {
-                Paciente = pac;
-                return true;
-            }
-        }*/
-
         public void ExibirErros()
         {
             foreach (var erro in Erros)
@@ -84,6 +62,7 @@ namespace ClinicaSorriso.Helpers
                 Console.WriteLine($"Erro: {erro.Value}");
             }
         }
+
         private bool VerificaHorario(string horario)
         {
             string padrao = "[0-1][0-9][0-5][0-9]";
@@ -156,11 +135,11 @@ namespace ClinicaSorriso.Helpers
             {
                 DataConsulta = result;
 
-                HoraInicio = HoraInicio.Replace(":", "");
+                string horaInicio = HoraInicio.Replace(":", "");
                 if (VerificaHorario(HoraInicio))
                 {
-                    string hora = HoraInicio.Substring(0, 2);
-                    string minuto = HoraInicio.Substring(2, 2);
+                    string hora = horaInicio.Substring(0, 2);
+                    string minuto = horaInicio.Substring(2, 2);
                     DateTime d2 = DataConsulta.AddHours(double.Parse(hora)).AddMinutes(double.Parse(minuto));
                     DataConsulta = d2;
                 }

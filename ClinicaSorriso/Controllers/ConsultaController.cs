@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ClinicaSorriso.Models;
 using ClinicaSorriso.Services;
 using ClinicaSorriso.Views;
@@ -7,7 +8,7 @@ namespace ClinicaSorriso.Controllers
 {
     public class ConsultaController
     {
-        private PacienteService _pacienteService  { get; set; }
+        private PacienteService _pacienteService { get; set; }
         private ConsultaService _consultaService { get; set; }
 
         public ConsultaController(ConsultaService consultaService, PacienteService pacienteService)
@@ -57,13 +58,24 @@ namespace ClinicaSorriso.Controllers
             try
             {
                 var pacienteSalvo = _pacienteService.ConsultarPacientePorCPF(ConsultaView.ConsultarCpf());
-                if(pacienteSalvo == null)
+                if (pacienteSalvo == null)
                 {
                     ConsultaView.PacienteInesxistente();
                     return;
                 }
                 var dadosConsulta = ConsultaView.Cadastrar();
                 var novaConsulta = new Consulta(pacienteSalvo, DateTime.Parse(dadosConsulta[0]), dadosConsulta[1], dadosConsulta[2]);
+                var consultasDodia = _consultaService.ListarConsultas()
+                                                     .Where(c => c.Data.Date == novaConsulta.Data.Date)
+                                                     .ToList();
+                foreach(var consulta in consultasDodia)
+                {
+                    if (novaConsulta.TemChoqueDeHorario(consulta))
+                    { 
+                        Console.WriteLine("Erro: já existe uma consulta nesta data/hora");
+                        return;
+                    }
+                }
                 _consultaService.CadastrarConsulta(novaConsulta);
                 Console.WriteLine("Agendamento realizado com sucesso!");
             }
@@ -78,7 +90,7 @@ namespace ClinicaSorriso.Controllers
 
         }
 
-        
+
         public void ListarAgenda()
         {
             var opcaoListagem = ConsultaView.ObterOpcaoListagem();
@@ -87,7 +99,8 @@ namespace ClinicaSorriso.Controllers
             {
                 ConsultaView.ListarAgenda(_consultaService.ListarConsultas());
             }
-            if (opcaoListagem == 'P'){
+            if (opcaoListagem == 'P')
+            {
 
             }
             else
@@ -98,9 +111,9 @@ namespace ClinicaSorriso.Controllers
 
         private void PopularAgenda()
         {
-            _consultaService.CadastrarConsulta(new Consulta(_pacienteService.ConsultarPacientePorCPF("39401787050"), Convert.ToDateTime("15/05/2022"), "08:00", "09:00"));
+            _consultaService.CadastrarConsulta(new Consulta(_pacienteService.ConsultarPacientePorCPF("39401787050"), Convert.ToDateTime("15/05/2022 "), "08:00", "09:00"));
             _consultaService.CadastrarConsulta(new Consulta(_pacienteService.ConsultarPacientePorCPF("80519936086"), Convert.ToDateTime("15/06/2022"), "10:15", "11:00"));
-            _consultaService.CadastrarConsulta(new Consulta(_pacienteService.ConsultarPacientePorCPF("91490575022"), Convert.ToDateTime("15/06/2022"), "13:45", "15:00"));            
+            _consultaService.CadastrarConsulta(new Consulta(_pacienteService.ConsultarPacientePorCPF("91490575022"), Convert.ToDateTime("15/06/2022"), "13:45", "15:00"));
         }
 
     }
