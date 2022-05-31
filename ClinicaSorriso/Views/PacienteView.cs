@@ -64,6 +64,11 @@ namespace ClinicaSorriso.Views
             foreach (var paciente in pacientes)
             {
                 Console.WriteLine(String.Format("{0,-11} {1,-32} {2,-10} {3, 1}", paciente.Cpf, paciente.Nome, paciente.DataNascimento.ToString("dd/MM/yyyy"), paciente.GetIdade()));
+                if (paciente.TemConsultaFutura())
+                {
+                    Console.WriteLine(String.Format("{0,-11} {1,-12} ", " ", $"Agendado para: {paciente.ConsultaMarcada.Data.ToString("dd/MM/yyyy")}"));
+                    Console.WriteLine(String.Format("{0,-11} {1,-12} ", " ", $"{paciente.ConsultaMarcada.HoraInicio} às {paciente.ConsultaMarcada.HoraFim}"));
+                }
             }
         }
 

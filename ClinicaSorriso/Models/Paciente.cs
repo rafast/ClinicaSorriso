@@ -6,7 +6,7 @@ namespace ClinicaSorriso.Models
         public string Nome { get; set; }
         public string Cpf { get; set; }
         public DateTime DataNascimento { get; set; }
-        public Consulta ConsultaMarcada { get; set; } = null;
+        public Consulta ConsultaMarcada { get; set; }
 
         public Paciente(string nome, string cpf, DateTime dataNascimento)
         {
@@ -23,6 +23,15 @@ namespace ClinicaSorriso.Models
         public void MarcarConsulta(Consulta consulta)
         {
             ConsultaMarcada = consulta;
+        }
+
+        public bool TemConsultaFutura()
+        {
+            if (ConsultaMarcada != null)
+            {
+                return ConsultaMarcada.Data > DateTime.Now;
+            }
+            return false;
         }
     }
 }

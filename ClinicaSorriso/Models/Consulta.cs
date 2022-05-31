@@ -15,11 +15,7 @@ namespace ClinicaSorriso.Models
             Data = data;
             HoraInicio = horaInicio;
             HoraFim = horaFim;
+            Paciente.MarcarConsulta(this);
         }
-        /*/public bool TemChoqueDeHorario(Consulta consulta) 
-        {
-            !(dataHoraInicio > intervalo.dataHoraFinal || dataHoraFinal < intervalo.dataHoraInicio);
-
-        } adsdas lucas rafael */
     }
 }
