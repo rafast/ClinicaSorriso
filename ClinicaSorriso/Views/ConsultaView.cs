@@ -59,7 +59,7 @@ namespace ClinicaSorriso.Views
 
         public static string ConsultarCpf()
         {
-            Console.WriteLine("CPF: ");
+            Console.Write("CPF: ");
             PacienteCpf = Console.ReadLine();
             return PacienteCpf;
         }

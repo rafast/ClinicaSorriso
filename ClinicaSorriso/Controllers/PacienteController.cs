@@ -28,8 +28,8 @@ namespace ClinicaSorriso.Controllers
                     Cadastrar();
                     break;
                 case '2':
-                    Console.WriteLine("Excluir paciente");
-                    //Excluir();
+                    Console.Clear();
+                    Excluir();
                     break;
                 case '3':
                     Console.Clear();
@@ -66,11 +66,30 @@ namespace ClinicaSorriso.Controllers
             {
                 Console.WriteLine($"Erro: {ex.Message}");
             }
+            catch (ApplicationException ex)
+            {
+                Console.WriteLine($"Erro: {ex.Message}");
+            }
         }
 
         public void Excluir()
         {
-
+            var pacienteSalvo = _pacienteService.ConsultarPacientePorCPF(PacienteView.ConsultarCpf());
+            if (pacienteSalvo == null)
+            {
+                ConsultaView.PacienteInesxistente();
+                return;
+            }
+            try
+            {
+                _pacienteService.ExcluirPaciente(pacienteSalvo);
+                //falta excluir todas as consultas passadas.
+                Console.WriteLine("Paciente excluído com sucesso!");
+            }
+            catch (ApplicationException)
+            {
+                Console.WriteLine($"Erro: paciente está agendado para {pacienteSalvo.ConsultaMarcada.Data.ToString("dd/MM/yyyy")} as {pacienteSalvo.ConsultaMarcada.Data.ToString("HH:mm")}h");
+            }
         }
 
         public void ListarPorCpf()
