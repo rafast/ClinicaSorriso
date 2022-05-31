@@ -21,7 +21,7 @@ namespace ClinicaSorriso.Helpers
         public DateTime DataConsulta { get; set; }
         private double _horarioDeAbertura = 8.00;
         private double _horarioDeEncerramento = 19.00;
-
+        
         public ValidadorConsulta(string data, string horaInicio, string horaFim)
         {
 

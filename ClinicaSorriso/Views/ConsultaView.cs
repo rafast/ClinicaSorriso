@@ -51,6 +51,18 @@ namespace ClinicaSorriso.Views
             DadosValidados.Add(validadorConsulta.HoraFim);
             return DadosValidados;
         }
+        public static List<string> Excluir()
+        {
+            List<string> listaDeDados = new List<string>();
+            Console.WriteLine("Data da consulta: ");
+            string inputData = Console.ReadLine();
+            Console.Write("Hora inicial: ");
+            string inputHora = Console.ReadLine();
+            listaDeDados.Add(inputData);
+            listaDeDados.Add(inputHora);
+
+            return listaDeDados;
+        }
 
         public static void PacienteInesxistente()
         {

@@ -4,8 +4,6 @@ using ClinicaSorriso.Repositories.InMemory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClinicaSorriso.Services
 {
@@ -30,7 +28,7 @@ namespace ClinicaSorriso.Services
 
         public void ExcluirConsulta(Consulta consulta)
         {
-            throw new NotImplementedException();
+            _consultaRepositoryInMemory.Deletar(consulta);
         }
 
         public List<Consulta> ListarConsultas()
@@ -42,5 +40,20 @@ namespace ClinicaSorriso.Services
         {
             return _consultaRepositoryInMemory.ListarTodos().Where(c => c.Data == dataHj).ToList();
         }
+
+        public bool TemChoqueDeHorario(Consulta novaConsulta)
+        {
+            var consultasDoDia = ListarConsultas().Where(c => c.Data.Date == novaConsulta.Data.Date)
+                                                  .ToList();
+            foreach (var consulta in consultasDoDia)
+            {
+                if (novaConsulta.TemChoqueDeHorario(consulta))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 }

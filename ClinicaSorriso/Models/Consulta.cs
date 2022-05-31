@@ -15,7 +15,6 @@ namespace ClinicaSorriso.Models
             Data = data;
             HoraInicio = horaInicio;
             HoraFim = horaFim;
-            Paciente.MarcarConsulta(this);
             TempoDeConsulta = GetTempoDeConsulta();
         }
         public bool TemChoqueDeHorario(Consulta consulta)
