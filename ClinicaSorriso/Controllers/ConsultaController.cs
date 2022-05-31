@@ -57,12 +57,7 @@ namespace ClinicaSorriso.Controllers
         {
             try
             {
-                var pacienteSalvo = _pacienteService.ConsultarPacientePorCPF(ConsultaView.ConsultarCpf());
-                if (pacienteSalvo == null)
-                {
-                    ConsultaView.PacienteInesxistente();
-                    return;
-                }
+                ChecaCpf();
                 var dadosConsulta = ConsultaView.Cadastrar();
                 var novaConsulta = new Consulta(pacienteSalvo, DateTime.Parse(dadosConsulta[0]), dadosConsulta[1], dadosConsulta[2]);
                 var consultasDodia = _consultaService.ListarConsultas()
@@ -85,11 +80,26 @@ namespace ClinicaSorriso.Controllers
             }
         }
 
-        public void Excluir()
+        public int Excluir()
         {
-
+            return 1 + 1;
         }
 
+        public void ChecaCpf()
+        {
+            var pacienteSalvo = _pacienteService.ConsultarPacientePorCPF(ConsultaView.ConsultarCpf());
+            if (pacienteSalvo == null)
+            {
+                ConsultaView.PacienteInesxistente();
+                return;
+            }
+            else if (pacienteSalvo.ConsultaMarcada != null)
+            {
+                Console.WriteLine($"Erro: o paciente já possui consulta marcada para:" +
+                    $"{pacienteSalvo.ConsultaMarcada.Data.ToString("dd/MM/yyyy")}");
+                return;
+            }
+        }
 
         public void ListarAgenda()
         {

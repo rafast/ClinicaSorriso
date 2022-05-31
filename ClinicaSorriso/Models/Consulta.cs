@@ -44,8 +44,6 @@ namespace ClinicaSorriso.Models
             string minuto = horarioGeral.Substring(2, 2);
             DateTime data = Data.AddHours(double.Parse(hora)).AddMinutes(double.Parse(minuto));
             return data;
-
-
         }
 
         private string  RemovePonto(string s)
