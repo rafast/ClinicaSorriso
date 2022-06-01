@@ -28,13 +28,16 @@ namespace ClinicaSorriso.Services
 
         public void DesmarcarConsulta(Paciente paciente, Consulta consulta)
         {
+            if (consulta.Data < DateTime.Now)
+            {
+                throw new ApplicationException("Só é possivel cancelar agendamentos futuros. ");
+            }
             paciente.ConsultaMarcada = null;
             consulta.Paciente = null;
         }
 
         public void ExcluirConsulta(Consulta consulta, List<string> listaDeDados)
-        {
-         
+        {         
             string data = consulta.Data.ToString("dd/MM/yyyy");
             string hora = consulta.HoraInicio.ToString();
 
@@ -69,6 +72,19 @@ namespace ClinicaSorriso.Services
                 }
             }
             return false;
+        }
+
+        public void ExcluirConsultasDoPaciente(Paciente paciente)
+        {
+            var consultasDoPaciente = ListarConsultas().Where(c => c.Paciente.Cpf == paciente.Cpf);
+
+            if (consultasDoPaciente.Count() > 0)
+            {
+                foreach (var consulta in consultasDoPaciente)
+                {
+                    _consultaRepositoryInMemory.Deletar(consulta);
+                }
+            }
         }
 
     }
