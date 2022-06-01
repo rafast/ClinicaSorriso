@@ -43,7 +43,6 @@ namespace ClinicaSorriso.Services
             if (data != listaDeDados[0] || hora != listaDeDados[1])
             {
                 throw new ApplicationException(" Agendamento não encontrado. ");
-                return;
             }
             _consultaRepositoryInMemory.Deletar(consulta);
         }
