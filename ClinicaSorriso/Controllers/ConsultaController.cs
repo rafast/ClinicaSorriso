@@ -105,6 +105,7 @@ namespace ClinicaSorriso.Controllers
             try
             {
                 _consultaService.ExcluirConsulta(consulta, listaDeDados);
+                pacienteConsulta.CancelarConsulta();
                 Console.WriteLine("Consulta excluída com sucesso!");
             }
             catch (ApplicationException e)

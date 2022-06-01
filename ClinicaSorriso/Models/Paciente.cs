@@ -32,6 +32,11 @@ namespace ClinicaSorriso.Models
             ConsultaMarcada = consulta;
         }
 
+        public void CancelarConsulta()
+        {
+            ConsultaMarcada = null;
+        }
+
         public bool TemConsultaFutura()
         {
             if (ConsultaMarcada != null)
