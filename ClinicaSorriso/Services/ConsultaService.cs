@@ -31,7 +31,6 @@ namespace ClinicaSorriso.Services
             if (consulta.Data < DateTime.Now)
             {
                 throw new ApplicationException("Só é possivel cancelar agendamentos futuros. ");
-                return;
             }
 
             string data = consulta.Data.ToString("dd/MM/yyyy");
@@ -39,7 +38,6 @@ namespace ClinicaSorriso.Services
             if (data != listaDeDados[0] || hora != listaDeDados[1])
             {
                 throw new ApplicationException(" Agendamento não encontrado. ");
-                return;
             }
             _consultaRepositoryInMemory.Deletar(consulta);
         }
@@ -76,7 +74,7 @@ namespace ClinicaSorriso.Services
             {
                 foreach (var consulta in consultasDoPaciente)
                 {
-                    ExcluirConsulta(consulta);
+                    _consultaRepositoryInMemory.Deletar(consulta);
                 }
             }
         }
