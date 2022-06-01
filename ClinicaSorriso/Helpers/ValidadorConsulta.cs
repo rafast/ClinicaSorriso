@@ -65,10 +65,11 @@ namespace ClinicaSorriso.Helpers
 
         private bool VerificaHorario(string horario)
         {
-            string padrao = "[0-1][0-9][0-5][0-9]";
+            string padrao = "[0-1][0-9]:[0-5][0-9]";
 
             if (Regex.IsMatch(horario, padrao))
             {
+                horario = horario.Replace(":", "");
                 string minuto = horario.Substring(2, 2);
                 if (minuto == "00" || minuto == "15" || minuto == "30" || minuto == "45")
                 {
@@ -85,11 +86,13 @@ namespace ClinicaSorriso.Helpers
         {
             if (horario == HoraInicio || horario == HoraFim)
             {
-                string hInicial = HoraInicio.Replace(":", "");
-                string hFinal = HoraFim.Replace(":", "");
+                string hInicial = HoraInicio;
+                string hFinal = HoraFim;
                 if (VerificaHorario(hInicial) && VerificaHorario(hFinal))
                 {
                     InicializaDataConsulta();
+                    hInicial = hInicial.Replace(":", "");
+                    hFinal = hFinal.Replace(":", "");
                     return double.Parse(hInicial) < double.Parse(hFinal);
                 }
             }

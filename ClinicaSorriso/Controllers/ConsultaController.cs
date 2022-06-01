@@ -134,21 +134,9 @@ namespace ClinicaSorriso.Controllers
 
         private void PopularAgenda()
         {
-            var joao = _pacienteService.ConsultarPacientePorCPF("39401787050");
-            var paula = _pacienteService.ConsultarPacientePorCPF("80519936086");
-            var wagner = _pacienteService.ConsultarPacientePorCPF("91490575022");
-
-            var consultaJoao = new Consulta(joao, Convert.ToDateTime("15/05/2022 "), "08:00", "09:00");
-            var consultaPaula = new Consulta(paula, Convert.ToDateTime("15/06/2022"), "10:15", "11:00");
-            var consultaWagner = new Consulta(wagner, Convert.ToDateTime("15/06/2022"), "13:45", "15:00");
-
-            _consultaService.CadastrarConsulta(consultaJoao);
-            _consultaService.CadastrarConsulta(consultaPaula);
-            _consultaService.CadastrarConsulta(consultaWagner);
-
-            joao.MarcarConsulta(consultaJoao);
-            paula.MarcarConsulta(consultaPaula);
-            wagner.MarcarConsulta(consultaWagner);
+            _consultaService.CadastrarConsulta(new Consulta(_pacienteService.ConsultarPacientePorCPF("39401787050"), Convert.ToDateTime("15/05/2022 "), "08:00", "09:00"));
+            _consultaService.CadastrarConsulta(new Consulta(_pacienteService.ConsultarPacientePorCPF("80519936086"), Convert.ToDateTime("15/06/2022"), "10:15", "11:00"));
+            _consultaService.CadastrarConsulta(new Consulta(_pacienteService.ConsultarPacientePorCPF("91490575022"), Convert.ToDateTime("15/06/2022"), "13:45", "15:00"));
         }
 
     }
