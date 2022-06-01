@@ -7,7 +7,6 @@ namespace ClinicaSorriso.Views
 {
     public static class ConsultaView
     {
-        private static string PacienteCpf { get; set; }
         public static void MenuAgenda()
         {
             Console.WriteLine("Agenda");

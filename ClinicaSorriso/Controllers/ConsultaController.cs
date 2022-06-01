@@ -97,7 +97,7 @@ namespace ClinicaSorriso.Controllers
             }
             if (!pacienteConsulta.TemConsultaFutura())
             {
-                Console.WriteLine("O paciente não possui consulta futura marcada!");
+                Console.WriteLine("O paciente não possui consulta marcada!");
                 return;
             }
             var consulta = pacienteConsulta.ConsultaMarcada;

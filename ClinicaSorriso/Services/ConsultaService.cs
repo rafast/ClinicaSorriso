@@ -33,7 +33,8 @@ namespace ClinicaSorriso.Services
         }
 
         public void ExcluirConsulta(Consulta consulta, List<string> listaDeDados)
-        {         
+        {
+         
             string data = consulta.Data.ToString("dd/MM/yyyy");
             string hora = consulta.HoraInicio.ToString();
 
