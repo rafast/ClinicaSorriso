@@ -26,16 +26,19 @@ namespace ClinicaSorriso.Services
 
         }
 
-        public void ExcluirConsulta(Consulta consulta, List<string> listaDeDados)
+        public void DesmarcarConsulta(Paciente paciente, Consulta consulta)
         {
-            if (consulta.Data < DateTime.Now)
-            {
-                throw new ApplicationException("Só é possivel cancelar agendamentos futuros. ");
-                return;
-            }
+            paciente.ConsultaMarcada = null;
+            consulta.Paciente = null;
+        }
 
+        public void ExcluirConsulta(Consulta consulta, List<string> listaDeDados)
+        {         
             string data = consulta.Data.ToString("dd/MM/yyyy");
             string hora = consulta.HoraInicio.ToString();
+
+            if (listaDeDados[1].Length == 4) hora = hora.Replace(":", "");
+
             if (data != listaDeDados[0] || hora != listaDeDados[1])
             {
                 throw new ApplicationException(" Agendamento não encontrado. ");

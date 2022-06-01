@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+
 namespace ClinicaSorriso.Models
 {
     public class Consulta
@@ -16,6 +18,7 @@ namespace ClinicaSorriso.Models
             HoraInicio = horaInicio;
             HoraFim = horaFim;
             TempoDeConsulta = GetTempoDeConsulta();
+            paciente.MarcarConsulta(this);
         }
         public bool TemChoqueDeHorario(Consulta consulta)
         {
@@ -27,7 +30,7 @@ namespace ClinicaSorriso.Models
             return !(double.Parse(horaInicio) > double.Parse(consultaHoraFim) || double.Parse(horaFim) < double.Parse(consultaHoraInicio));
         }
 
-        public TimeSpan GetTempoDeConsulta()
+        private TimeSpan GetTempoDeConsulta()
         {
             DateTime d1 = RetornaDt(HoraInicio);
             DateTime d2 = RetornaDt(HoraFim);
@@ -35,7 +38,6 @@ namespace ClinicaSorriso.Models
             return duration;
         
         }
-
         private DateTime RetornaDt(string s)
         {
             string horarioGeral = RemovePonto(s);
