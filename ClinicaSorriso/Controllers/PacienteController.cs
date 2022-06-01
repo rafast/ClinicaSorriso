@@ -79,7 +79,7 @@ namespace ClinicaSorriso.Controllers
             var pacienteSalvo = _pacienteService.ConsultarPacientePorCPF(PacienteView.ConsultarCpf());
             if (pacienteSalvo == null)
             {
-                ConsultaView.PacienteInesxistente();
+                PacienteView.PacienteInesxistente();
                 return;
             }
             try
