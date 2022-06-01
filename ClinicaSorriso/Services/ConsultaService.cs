@@ -55,5 +55,18 @@ namespace ClinicaSorriso.Services
             return false;
         }
 
+        public void ExcluirConsultasDoPaciente(Paciente paciente)
+        {
+            var consultasDoPaciente = ListarConsultas().Where(c => c.Paciente.Cpf == paciente.Cpf);
+
+            if (consultasDoPaciente.Count() > 0)
+            {
+                foreach (var consulta in consultasDoPaciente)
+                {
+                    ExcluirConsulta(consulta);
+                }
+            }
+        }
+
     }
 }

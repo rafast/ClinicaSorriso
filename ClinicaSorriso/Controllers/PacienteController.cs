@@ -8,10 +8,12 @@ namespace ClinicaSorriso.Controllers
     public class PacienteController
     {
         private PacienteService _pacienteService { get; set; }
+        private ConsultaService _consultaService { get; set; }
 
-        public PacienteController(PacienteService pacienteService)
+        public PacienteController(PacienteService pacienteService, ConsultaService consultaService)
         {
-            this._pacienteService = pacienteService;
+            _pacienteService = pacienteService;
+            _consultaService = consultaService;
         }
 
         public void LeituraOpcao()
@@ -82,13 +84,13 @@ namespace ClinicaSorriso.Controllers
             }
             try
             {
-                _pacienteService.ExcluirPaciente(pacienteSalvo);
-                //falta excluir todas as consultas passadas.
+                _pacienteService.ExcluirPaciente(pacienteSalvo);                
+                _consultaService.ExcluirConsultasDoPaciente(pacienteSalvo);
                 Console.WriteLine("Paciente excluído com sucesso!");
             }
             catch (ApplicationException)
             {
-                Console.WriteLine($"Erro: paciente está agendado para {pacienteSalvo.ConsultaMarcada.Data.ToString("dd/MM/yyyy")} as {pacienteSalvo.ConsultaMarcada.Data.ToString("HH:mm")}h");
+                Console.WriteLine($"Erro: paciente está agendado para {pacienteSalvo.ConsultaMarcada.Data.ToString("dd/MM/yyyy")} as {pacienteSalvo.ConsultaMarcada.HoraInicio}h");
             }
         }
 
