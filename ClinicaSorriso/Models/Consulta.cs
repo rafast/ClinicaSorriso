@@ -32,15 +32,15 @@ namespace ClinicaSorriso.Models
 
         private TimeSpan GetTempoDeConsulta()
         {
-            DateTime d1 = RetornaDt(HoraInicio);
-            DateTime d2 = RetornaDt(HoraFim);
-            TimeSpan duration = d2.Subtract(d1);
+            DateTime dtHoraInicio = RetornaDt(HoraInicio);
+            DateTime dtHoraFim = RetornaDt(HoraFim);
+            TimeSpan duration = dtHoraFim.Subtract(dtHoraInicio);
             return duration;
         
         }
-        private DateTime RetornaDt(string s)
+        private DateTime RetornaDt(string str)
         {
-            string horarioGeral = RemovePonto(s);
+            string horarioGeral = RemovePonto(str);
             string hora = horarioGeral.Substring(0, 2);
             string minuto = horarioGeral.Substring(2, 2);
             DateTime data = Data.AddHours(double.Parse(hora)).AddMinutes(double.Parse(minuto));
