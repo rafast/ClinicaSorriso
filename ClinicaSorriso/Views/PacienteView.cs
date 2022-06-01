@@ -58,6 +58,11 @@ namespace ClinicaSorriso.Views
             return new Paciente(validadorPaciente.Nome, validadorPaciente.Cpf, Convert.ToDateTime(validadorPaciente.DtNascimento));
         }
 
+        public static void PacienteInesxistente()
+        {
+            Console.WriteLine("Erro: paciente não cadastrado ");
+        }
+
         public static void ListarPacientes(List<Paciente> pacientes)
         {
             if(pacientes.Count == 0)

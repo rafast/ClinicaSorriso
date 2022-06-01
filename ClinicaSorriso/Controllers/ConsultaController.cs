@@ -28,11 +28,11 @@ namespace ClinicaSorriso.Controllers
                 switch (opcao.KeyChar)
                 {
                     case '1':
-                        Console.WriteLine("Agendar consulta");
+                        Console.Clear();
                         Cadastrar();
                         break;
                     case '2':
-                        Console.WriteLine("Cancelar agendamento");
+                        Console.Clear();
                         Excluir();
                         break;
                     case '3':
@@ -57,10 +57,10 @@ namespace ClinicaSorriso.Controllers
         {
             try
             {
-                var pacienteSalvo = _pacienteService.ConsultarPacientePorCPF(ConsultaView.ConsultarCpf());
+                var pacienteSalvo = _pacienteService.ConsultarPacientePorCPF(PacienteView.ConsultarCpf());
                 if (pacienteSalvo == null)
                 {
-                    ConsultaView.PacienteInesxistente();
+                    PacienteView.PacienteInesxistente();
                     return;
                 }
                 else if(pacienteSalvo.ConsultaMarcada != null)
@@ -92,44 +92,26 @@ namespace ClinicaSorriso.Controllers
             var pacienteConsulta = _pacienteService.ConsultarPacientePorCPF(PacienteView.ConsultarCpf());
             if (pacienteConsulta == null)
             {
-                ConsultaView.PacienteInesxistente();
+                PacienteView.PacienteInesxistente();
                 return;
             }
-            
-            if(pacienteConsulta.ConsultaMarcada == null)
+            if (!pacienteConsulta.TemConsultaFutura())
             {
-                Console.WriteLine($"O paciente {pacienteConsulta.Nome} não possui nenhuma consulta marcada. ");
+                Console.WriteLine("O paciente não possui consulta marcada!");
                 return;
             }
-
-            if(pacienteConsulta.ConsultaMarcada.Data < DateTime.Now)
-            {
-                Console.WriteLine("Só é possivel cancelar agendamentos futuros. ");
-                return;
-            }
-           
+            var consulta = pacienteConsulta.ConsultaMarcada;
             var listaDeDados = ConsultaView.Excluir();
-            string data = pacienteConsulta.ConsultaMarcada.Data.ToString("dd/MM/yyyy");
-            string hora = pacienteConsulta.ConsultaMarcada.HoraInicio.ToString();
-            if(data != listaDeDados[0] || hora != listaDeDados[1])
-            {
-                Console.WriteLine("Erro: Agendamento não encontrado. ");
-                return;
-            }
-            
             try
             {
-                _consultaService.ExcluirConsulta(pacienteConsulta.ConsultaMarcada);
+                _consultaService.ExcluirConsulta(consulta, listaDeDados);
                 Console.WriteLine("Consulta excluída com sucesso!");
             }
-            catch (ApplicationException)
+            catch (ApplicationException e)
             {
-                Console.WriteLine($"Error");
+                Console.WriteLine($"Error: {e.Message} ");
             }
         }
-    
-
-        
 
         public void ListarAgenda()
         {

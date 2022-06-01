@@ -8,6 +8,6 @@ namespace ClinicaSorriso.Services
     {
         List<Consulta> ListarConsultas();
         void CadastrarConsulta(Consulta consulta);
-        void ExcluirConsulta(Consulta consulta);
+        void ExcluirConsulta(Consulta consulta, List<string> listaDeDados);
     }
 }

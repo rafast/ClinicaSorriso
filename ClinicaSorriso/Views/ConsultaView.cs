@@ -64,18 +64,6 @@ namespace ClinicaSorriso.Views
             return listaDeDados;
         }
 
-        public static void PacienteInesxistente()
-        {
-            Console.WriteLine("Erro: paciente não cadastrado ");
-        }
-
-        public static string ConsultarCpf()
-        {
-            Console.Write("CPF: ");
-            PacienteCpf = Console.ReadLine();
-            return PacienteCpf;
-        }
-        
         public static char ObterOpcaoListagem()
         {
             Console.Write("Apresentar a agenda T-Toda ou P-Periodo: ");
