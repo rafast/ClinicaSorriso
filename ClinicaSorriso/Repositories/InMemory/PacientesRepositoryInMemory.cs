@@ -21,7 +21,7 @@ namespace ClinicaSorriso.Repositories.InMemory
             _pacientesRepository.Remove(entity);
         }
 
-        // Retorna uma lista com tdos os pacientes da base de pacientes
+        // Retorna uma lista com dos os pacientes da base de pacientes
         public List<Paciente> ListarTodos()
         {
             return _pacientesRepository;

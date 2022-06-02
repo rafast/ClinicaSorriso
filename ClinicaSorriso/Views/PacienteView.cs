@@ -6,6 +6,7 @@ using ClinicaSorriso.Models;
 
 namespace ClinicaSorriso.Views
 {
+    // Classe responsável por exibir e ler informações referentes ao Paciente
     public static class PacienteView
     {        
 
