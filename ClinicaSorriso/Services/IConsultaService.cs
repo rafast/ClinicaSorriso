@@ -10,5 +10,8 @@ namespace ClinicaSorriso.Services
         List<Consulta> ListarConsultas();
         void CadastrarConsulta(Consulta consulta);
         void ExcluirConsulta(Consulta consulta, List<string> listaDeDados);
+        List<Consulta> ListarConsultasDoDia(DateTime data);
+        bool TemChoqueDeHorario(Consulta novaConsulta);
+        void ExcluirConsultasDoPaciente(Paciente paciente);
     }
 }

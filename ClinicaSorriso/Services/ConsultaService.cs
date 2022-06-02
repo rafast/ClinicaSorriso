@@ -26,26 +26,17 @@ namespace ClinicaSorriso.Services
 
         }
 
-        public void DesmarcarConsulta(Paciente paciente, Consulta consulta)
-        {
-            if (consulta.Data < DateTime.Now)
-            {
-                throw new ApplicationException("Só é possivel cancelar agendamentos futuros. ");
-            }
-            paciente.ConsultaMarcada = null;
-            consulta.Paciente = null;
-        }
-
+        
         public void ExcluirConsulta(Consulta consulta, List<string> listaDeDados)
         {         
             string data = consulta.Data.ToString("dd/MM/yyyy");
-            string hora = consulta.HoraInicio.ToString();
+            string hora = consulta.HoraInicio;
 
-            if (listaDeDados[1].Length == 4) hora = hora.Replace(":", "");
+            if (hora.Contains(":")) hora = hora.Replace(":", "");
 
             if (data != listaDeDados[0] || hora != listaDeDados[1])
             {
-                throw new ApplicationException(" Agendamento não encontrado. ");
+                throw new ApplicationException("Agendamento não encontrado. ");
             }
             _consultaRepositoryInMemory.Deletar(consulta);
         }
@@ -57,18 +48,18 @@ namespace ClinicaSorriso.Services
 
         public List<Consulta> ListarConsultasDoDia(DateTime dataHj)
         {
-            return _consultaRepositoryInMemory.ListarTodos().Where(c => c.Data == dataHj).ToList();
+            return _consultaRepositoryInMemory.ListarTodos().Where(c => c.Data.Date == dataHj.Date).ToList();
         }
 
         public bool TemChoqueDeHorario(Consulta novaConsulta)
         {
-            var consultasDoDia = ListarConsultas().Where(c => c.Data.Date == novaConsulta.Data.Date)
-                                                  .ToList();
+            var consultasDoDia = ListarConsultasDoDia(novaConsulta.Data);
             foreach (var consulta in consultasDoDia)
             {
                 if (novaConsulta.TemChoqueDeHorario(consulta))
                 {
-                    return true;
+                    novaConsulta.Paciente.CancelarConsulta();
+                    throw new ApplicationException("já existe uma consulta agendada nesta data/hora ");
                 }
             }
             return false;

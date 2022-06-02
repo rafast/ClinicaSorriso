@@ -62,6 +62,22 @@ namespace ClinicaSorriso.Views
 
             return listaDeDados;
         }
+        public static void AgendamentoRealizado()
+        {
+            Console.WriteLine("Agendamento realizado com sucesso!");
+        }
+
+        // Exibe mensagem de cadastro excluído com sucesso
+        public static void ConsultaExcluida()
+        {
+            Console.WriteLine("Consulta excluída com sucesso!");
+        }
+
+        // Exibe mensagem de erro
+        public static void MensagemErro(string msg)
+        {
+            Console.WriteLine($"Erro: {msg}");
+        }
 
         public static char ObterOpcaoListagem()
         {
@@ -80,6 +96,7 @@ namespace ClinicaSorriso.Views
             Console.WriteLine("------------------------------------------------------------");
             Console.WriteLine("   Data    H.Ini H.Fim Tempo Nome                   Dt.Nasc.");
             Console.WriteLine("------------------------------------------------------------");
+            
             foreach (var consulta in agenda)
             {
                 Console.WriteLine(String.Format("{0,-10} {1,0} {2, 0} {3, 5} {4, -20} {5, 1}", consulta.Data.ToString("dd/MM/yyyy"), consulta.HoraInicio, consulta.HoraFim, consulta.TempoDeConsulta.ToString(@"hh\:mm"),
