@@ -6,6 +6,7 @@ using ClinicaSorriso.Repositories.InMemory;
 
 namespace ClinicaSorriso.Services
 {
+    // Classe que implementa a interface de serviços do Paciente
     public class PacienteService : IPacienteService
     {
         private PacientesRepositoryInMemory _pacientesRepository { get; set; }

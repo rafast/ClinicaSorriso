@@ -4,6 +4,7 @@ using ClinicaSorriso.Models;
 
 namespace ClinicaSorriso.Repositories.InMemory
 {
+    // Implementação da interface do repositório de Pacientes em memória
     public class PacientesRepositoryInMemory : IRepository<Paciente>
     {
         private List<Paciente> _pacientesRepository { get; set; }

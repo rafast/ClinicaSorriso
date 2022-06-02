@@ -1,6 +1,7 @@
 ﻿using System;
 namespace ClinicaSorriso.Views
 {
+    // Classe responsável por exibir o Menu Principal
     public static class MenuView
     {
 
