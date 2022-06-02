@@ -44,12 +44,12 @@ namespace ClinicaSorriso.Helpers
                 Erros.Add("Data", "Data inválida");
             }
 
-            if (!ValidaHorarios(HoraInicio))
+            if (!(ValidaHorarios(HoraInicio) && DataConsulta > DateTime.Now))
             {
                 Erros.Add("HoraInicio", "Digite um horário válido");
             }
 
-            if (!ValidaHorarios(HoraFim))
+            if (!(ValidaHorarios(HoraFim) && DataConsulta > DateTime.Now))
             {
                 Erros.Add("HoraFim", "Digite um horário válido");
             }
@@ -65,11 +65,10 @@ namespace ClinicaSorriso.Helpers
 
         private bool VerificaHorario(string horario)
         {
-            string padrao = "[0-1][0-9]:[0-5][0-9]";
+            string padrao = "[0-1][0-9][0-5][0-9]";
 
             if (Regex.IsMatch(horario, padrao))
             {
-                horario = horario.Replace(":", "");
                 string minuto = horario.Substring(2, 2);
                 if (minuto == "00" || minuto == "15" || minuto == "30" || minuto == "45")
                 {
@@ -84,20 +83,22 @@ namespace ClinicaSorriso.Helpers
 
         private bool ValidaHorarios(string horario)
         {
-            if (horario == HoraInicio || horario == HoraFim)
+            if(horario.Length == 4)
             {
-                string hInicial = HoraInicio;
-                string hFinal = HoraFim;
-                if (VerificaHorario(hInicial) && VerificaHorario(hFinal))
+                if (horario == HoraInicio || horario == HoraFim)
                 {
-                    InicializaDataConsulta();
-                    hInicial = hInicial.Replace(":", "");
-                    hFinal = hFinal.Replace(":", "");
-                    return double.Parse(hInicial) < double.Parse(hFinal);
+                    string hInicial = HoraInicio;
+                    string hFinal = HoraFim;
+                    if (VerificaHorario(hInicial) && VerificaHorario(hFinal))
+                    {
+                        InicializaDataConsulta();
+                        return double.Parse(hInicial) < double.Parse(hFinal);
+                    }
                 }
             }
             return false;
         }
+
         private bool ValidaData()
         {
             InicializaDataConsulta();
@@ -138,7 +139,7 @@ namespace ClinicaSorriso.Helpers
             {
                 DataConsulta = result;
 
-                string horaInicio = HoraInicio.Replace(":", "");
+                string horaInicio = HoraInicio;
                 if (VerificaHorario(HoraInicio))
                 {
                     string hora = horaInicio.Substring(0, 2);

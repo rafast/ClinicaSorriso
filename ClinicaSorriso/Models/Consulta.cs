@@ -19,6 +19,7 @@ namespace ClinicaSorriso.Models
             HoraFim = horaFim;
             TempoDeConsulta = GetTempoDeConsulta();
             paciente.MarcarConsulta(this);
+            FormataHorario();
         }
         public bool TemChoqueDeHorario(Consulta consulta)
         {
@@ -29,27 +30,45 @@ namespace ClinicaSorriso.Models
 
             return !(double.Parse(horaInicio) > double.Parse(consultaHoraFim) || double.Parse(horaFim) < double.Parse(consultaHoraInicio));
         }
+        private void FormataHorario()
+        {
+            if (!(HoraInicio.Contains(":") && HoraFim.Contains(":")))
+            {
+                HoraInicio = HoraInicio.Insert(2, ":");
+                HoraFim = HoraFim.Insert(2, ":");
+            }
+        }
 
         private TimeSpan GetTempoDeConsulta()
         {
-            DateTime dtHoraInicio = RetornaDt(HoraInicio);
-            DateTime dtHoraFim = RetornaDt(HoraFim);
+            string hrInicio = HoraInicio;
+            string hrFim = HoraFim;
+
+            if(HoraInicio.Contains(":") && HoraFim.Contains(":"))
+            {
+                hrInicio = HoraInicio.Replace(":", "");
+                hrFim = HoraFim.Replace(":", "");
+
+            }
+            DateTime dtHoraInicio = RetornaDt(hrInicio);
+            DateTime dtHoraFim = RetornaDt(hrFim);
             TimeSpan duration = dtHoraFim.Subtract(dtHoraInicio);
             return duration;
         
         }
         private DateTime RetornaDt(string str)
         {
-            string horarioGeral = RemovePonto(str);
+            string horarioGeral = str;
             string hora = horarioGeral.Substring(0, 2);
             string minuto = horarioGeral.Substring(2, 2);
             DateTime data = Data.AddHours(double.Parse(hora)).AddMinutes(double.Parse(minuto));
             return data;
         }
 
-        private string  RemovePonto(string s)
+        private string RemovePonto(string str)
         {
-            return s.Replace(":", "");
+            return str.Replace(":", "");          
         }
+        
     }
 }

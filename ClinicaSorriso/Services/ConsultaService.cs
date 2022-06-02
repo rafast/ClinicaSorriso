@@ -26,12 +26,13 @@ namespace ClinicaSorriso.Services
 
         }
 
+        
         public void ExcluirConsulta(Consulta consulta, List<string> listaDeDados)
         {         
             string data = consulta.Data.ToString("dd/MM/yyyy");
-            string hora = consulta.HoraInicio.ToString();
+            string hora = consulta.HoraInicio;
 
-            if (listaDeDados[1].Length == 4) hora = hora.Replace(":", "");
+            if (hora.Contains(":")) hora = hora.Replace(":", "");
 
             if (data != listaDeDados[0] || hora != listaDeDados[1])
             {
@@ -58,7 +59,8 @@ namespace ClinicaSorriso.Services
             {
                 if (novaConsulta.TemChoqueDeHorario(consulta))
                 {
-                    return true;
+                    novaConsulta.Paciente.CancelarConsulta();
+                    throw new ApplicationException(" já existe uma consulta agendada nesta data/hora ");
                 }
             }
             return false;

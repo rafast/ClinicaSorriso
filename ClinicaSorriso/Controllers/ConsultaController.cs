@@ -40,7 +40,6 @@ namespace ClinicaSorriso.Controllers
                         ListarAgenda();
                         break;
                     case '4':
-                        Console.WriteLine("Voltar p/ menu principal");
                         Console.Clear();
                         MenuView.MenuPrincipal();
                         exit = true;
@@ -63,27 +62,30 @@ namespace ClinicaSorriso.Controllers
                     PacienteView.MensagemErro("paciente não cadastrado.");
                     return;
                 }
-                else if(pacienteSalvo.ConsultaMarcada != null)
+   
+                if (pacienteSalvo.TemConsultaFutura())
                 {
-                    Console.WriteLine($"Erro: o paciente já possui consulta marcada para:" +
+                    PacienteView.MensagemErro($" o paciente já possui consulta marcada para:" +
                         $"{pacienteSalvo.ConsultaMarcada.Data.ToString("dd/MM/yyyy")}");
                     return;
                 }
+
                 var dadosConsulta = ConsultaView.Cadastrar();
                 var novaConsulta = new Consulta(pacienteSalvo, DateTime.Parse(dadosConsulta[0]), dadosConsulta[1], dadosConsulta[2]);
-                var temChoqueDehorario = _consultaService.TemChoqueDeHorario(novaConsulta);
-                if (temChoqueDehorario)
-                {
-                    Console.WriteLine("Erro: já existe uma consulta agendada nesta data/hora ");
-                    return;
-                }
+                
+                var temChoqueDehorario = _consultaService.TemChoqueDeHorario(novaConsulta);                 
+
                 _consultaService.CadastrarConsulta(novaConsulta);
                 pacienteSalvo.MarcarConsulta(novaConsulta);
-                Console.WriteLine("Agendamento realizado com sucesso!");
+                ConsultaView.AgendamentoRealizado();
             }
             catch (ArgumentException ex)
             {
-                Console.WriteLine($"Erro: {ex.Message}");
+                ConsultaView.MensagemErro(ex.Message);
+            }
+            catch (ApplicationException ex)
+            {
+                ConsultaView.MensagemErro(ex.Message);
             }
         }
 
@@ -97,7 +99,7 @@ namespace ClinicaSorriso.Controllers
             }
             if (!pacienteConsulta.TemConsultaFutura())
             {
-                Console.WriteLine("O paciente não possui consulta marcada!");
+                PacienteView.MensagemErro("O paciente não possui consulta futura marcada!");
                 return;
             }
             var consulta = pacienteConsulta.ConsultaMarcada;
@@ -106,11 +108,15 @@ namespace ClinicaSorriso.Controllers
             {
                 _consultaService.ExcluirConsulta(consulta, listaDeDados);
                 pacienteConsulta.CancelarConsulta();
-                Console.WriteLine("Consulta excluída com sucesso!");
+                ConsultaView.ConsultaExcluida();
             }
-            catch (ApplicationException e)
+            catch(ArgumentException ex)
             {
-                Console.WriteLine($"Error: {e.Message} ");
+                ConsultaView.MensagemErro(ex.Message);
+            }
+            catch (ApplicationException ex)
+            {
+                ConsultaView.MensagemErro(ex.Message);
             }
         }
 
