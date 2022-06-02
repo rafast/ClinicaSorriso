@@ -60,7 +60,7 @@ namespace ClinicaSorriso.Controllers
                 var pacienteSalvo = _pacienteService.ConsultarPacientePorCPF(PacienteView.ConsultarCpf());
                 if (pacienteSalvo == null)
                 {
-                    PacienteView.PacienteInesxistente();
+                    PacienteView.MensagemErro("paciente não cadastrado.");
                     return;
                 }
                 else if(pacienteSalvo.ConsultaMarcada != null)
@@ -92,7 +92,7 @@ namespace ClinicaSorriso.Controllers
             var pacienteConsulta = _pacienteService.ConsultarPacientePorCPF(PacienteView.ConsultarCpf());
             if (pacienteConsulta == null)
             {
-                PacienteView.PacienteInesxistente();
+                PacienteView.MensagemErro("paciente não cadastrado.");
                 return;
             }
             if (!pacienteConsulta.TemConsultaFutura())

@@ -1,5 +1,4 @@
 ﻿using System;
-using ClinicaSorriso.Helpers;
 using ClinicaSorriso.Services;
 using ClinicaSorriso.Views;
 
@@ -16,6 +15,7 @@ namespace ClinicaSorriso.Controllers
             _consultaService = consultaService;
         }
 
+        // Obtém a opção selecionada pelo usuario no Menu do Paciente e executa a respectiva funcionalidade
         public void LeituraOpcao()
         {
             bool exit = false;
@@ -42,7 +42,6 @@ namespace ClinicaSorriso.Controllers
                     ListarPorNome();
                     break;
                 case '5':                                               
-                    Console.WriteLine("Voltar p/ menu principal");
                     Console.Clear();
                     MenuView.MenuPrincipal();
                     exit = true;
@@ -57,48 +56,48 @@ namespace ClinicaSorriso.Controllers
 
         }
 
+        // Executa a lógica de cadastro de um paciente
         public void Cadastrar()
         {
             try
             {
                 _pacienteService.CadastrarPaciente(PacienteView.Cadastrar());
-                Console.WriteLine("Cadastro realizado com sucesso!");
+                PacienteView.CadastroRealizado();
             }
             catch (ArgumentException ex)
             {
-                Console.WriteLine($"Erro: {ex.Message}");
+                PacienteView.MensagemErro(ex.Message);
             }
             catch (ApplicationException ex)
             {
-                Console.WriteLine($"Erro: {ex.Message}");
+                PacienteView.MensagemErro(ex.Message);
             }
         }
 
+        // Executa a lógica de exclusão de um paciente de acordo com o CPF informado
         public void Excluir()
         {
             var pacienteSalvo = _pacienteService.ConsultarPacientePorCPF(PacienteView.ConsultarCpf());
-            if (pacienteSalvo == null)
-            {
-                PacienteView.PacienteInesxistente();
-                return;
-            }
+
             try
             {
                 _pacienteService.ExcluirPaciente(pacienteSalvo);                
                 _consultaService.ExcluirConsultasDoPaciente(pacienteSalvo);
-                Console.WriteLine("Paciente excluído com sucesso!");
+                PacienteView.PacienteExcluido();
             }
-            catch (ApplicationException)
+            catch (ApplicationException ex)
             {
-                Console.WriteLine($"Erro: paciente está agendado para {pacienteSalvo.ConsultaMarcada.Data.ToString("dd/MM/yyyy")} as {pacienteSalvo.ConsultaMarcada.HoraInicio}h");
+                PacienteView.MensagemErro(ex.Message);
             }
         }
 
+        // Obtém a lista de pacientes ordenadas por CPF do repositório e envia para ser exibida na PacienteView
         public void ListarPorCpf()
         {
             PacienteView.ListarPacientes(_pacienteService.ListarPacientesPorCPF()); 
         }
 
+        // Obtém a lista de pacientes ordenadas por Nome do repositório e envia para ser exibida na PacienteView
         public void ListarPorNome()
         {
             PacienteView.ListarPacientes(_pacienteService.ListarPacientesPorNome());

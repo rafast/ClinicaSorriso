@@ -14,21 +14,25 @@ namespace ClinicaSorriso.Repositories.InMemory
             PopulaPacientes();
         }
 
+        // Recebe um Paciente e o exclui da base de pacientes
         public void Deletar(Paciente entity)
         {
             _pacientesRepository.Remove(entity);
         }
 
+        // Retorna uma lista com tdos os pacientes da base de pacientes
         public List<Paciente> ListarTodos()
         {
             return _pacientesRepository;
         }
 
+        // Recebe um paciente e salva na base de pacientes
         public void Salvar(Paciente entity)
         {
             _pacientesRepository.Add(entity);
         }
 
+        // Cria alguns pacientes na base de pacientes inicial
         private void PopulaPacientes()
         {
             _pacientesRepository.Add(new Paciente("Joao Alves", "39401787050", Convert.ToDateTime("13/09/1982")));

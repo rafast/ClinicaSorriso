@@ -9,6 +9,7 @@ namespace ClinicaSorriso.Views
     public static class PacienteView
     {        
 
+        // Exibe o layout do menu do paciente
         public static void MenuPaciente()
         {
             Console.WriteLine("Menu do Cadastro de Pacientes");
@@ -19,6 +20,7 @@ namespace ClinicaSorriso.Views
             Console.WriteLine("5-Voltar p/ menu principal");
         }
 
+        // Obtém um CPF do usuário para consultar se existe na base de pacientes
         public static string ConsultarCpf()
         {
             Console.Write("CPF: ");
@@ -26,6 +28,7 @@ namespace ClinicaSorriso.Views
             return inputCpf;
         }
 
+        // Faz a leitura e validação dos dados necessários para cadastrar um novo paciente
         public static Paciente Cadastrar()
         {
             Console.Write("CPF: ");
@@ -58,11 +61,25 @@ namespace ClinicaSorriso.Views
             return new Paciente(validadorPaciente.Nome, validadorPaciente.Cpf, Convert.ToDateTime(validadorPaciente.DtNascimento));
         }
 
-        public static void PacienteInesxistente()
+        // Exibe mensagem de cadastro realizado com sucesso
+        public static void CadastroRealizado()
         {
-            Console.WriteLine("Erro: paciente não cadastrado ");
+            Console.WriteLine("Cadastro realizado com sucesso!");
         }
 
+        // Exibe mensagem de cadastro exluido com sucesso
+        public static void PacienteExcluido()
+        {
+            Console.WriteLine("Paciente excluído com sucesso!");
+        }
+
+        // Exibe mensagem de erro
+        public static void MensagemErro(string msg)
+        {
+            Console.WriteLine($"Erro: {msg}");
+        }
+
+        // Recebe uma lista de pacientes e imprime o layout da listagem de pacientes
         public static void ListarPacientes(List<Paciente> pacientes)
         {
             if(pacientes.Count == 0)

@@ -15,6 +15,7 @@ namespace ClinicaSorriso.Models
             DataNascimento = dataNascimento;
         }
 
+        // Retorna a idade do paciente
         public int GetIdade()
         {
             var dataHoje = DateTime.Today;
@@ -27,16 +28,19 @@ namespace ClinicaSorriso.Models
             return idade;
         }
 
+        // Atribui uma nova consulta ao paciente
         public void MarcarConsulta(Consulta consulta)
         {
             ConsultaMarcada = consulta;
         }
 
+        // Cancela uma consulta futura
         public void CancelarConsulta()
         {
             ConsultaMarcada = null;
         }
 
+        // Retorna se o paciente possui uma consulta marcada futura
         public bool TemConsultaFutura()
         {
             if (ConsultaMarcada != null)
