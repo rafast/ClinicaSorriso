@@ -48,19 +48,18 @@ namespace ClinicaSorriso.Services
 
         public List<Consulta> ListarConsultasDoDia(DateTime dataHj)
         {
-            return _consultaRepositoryInMemory.ListarTodos().Where(c => c.Data == dataHj).ToList();
+            return _consultaRepositoryInMemory.ListarTodos().Where(c => c.Data.Date == dataHj.Date).ToList();
         }
 
         public bool TemChoqueDeHorario(Consulta novaConsulta)
         {
-            var consultasDoDia = ListarConsultas().Where(c => c.Data.Date == novaConsulta.Data.Date)
-                                                  .ToList();
+            var consultasDoDia = ListarConsultasDoDia(novaConsulta.Data);
             foreach (var consulta in consultasDoDia)
             {
                 if (novaConsulta.TemChoqueDeHorario(consulta))
                 {
                     novaConsulta.Paciente.CancelarConsulta();
-                    throw new ApplicationException(" já existe uma consulta agendada nesta data/hora ");
+                    throw new ApplicationException("já existe uma consulta agendada nesta data/hora ");
                 }
             }
             return false;
