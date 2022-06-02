@@ -4,6 +4,7 @@ using ClinicaSorriso.Models;
 
 namespace ClinicaSorriso.Services
 {
+    // Interface de serviço responsável pelas operações do Paciente entre o controller e o repositorio
     public interface IPacienteService
     {
         List<Paciente> ListarPacientesPorCPF();

@@ -1,6 +1,7 @@
 ﻿using System;
 namespace ClinicaSorriso.Models
 {
+    // Classe que representa um paciente na aplicação
     public class Paciente
     {
         public string Nome { get; set; }
