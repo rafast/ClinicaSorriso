@@ -2,6 +2,7 @@
 using ClinicaSorriso.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ClinicaSorriso.Views
 {
@@ -21,21 +22,22 @@ namespace ClinicaSorriso.Views
 
             Console.Write("Data da consulta: ");
             string inputData = Console.ReadLine();    
-            Console.Write("Horário do inicio da consulta(HH/mm): ");
+            Console.Write("Hora inicial: ");
             string inputHrInicio = Console.ReadLine();
-            Console.Write("Horário do término da consulta(HH/mm): ");
+            Console.Write("Hora final: ");
             string inputHrFinal = Console.ReadLine();
 
-            var validadorConsulta = new ValidadorConsulta(inputData, inputHrInicio, inputHrFinal);
+            //var validadorConsulta = new ValidadorConsulta(inputData, inputHrInicio, inputHrFinal);
+            var validadorConsulta = new ValidaDadosConsulta(inputData, inputHrInicio, inputHrFinal);
             validadorConsulta.ValidarDados();
 
-            while (!validadorConsulta.IsValid())
+            while (validadorConsulta.HasErrors())
             {
                 validadorConsulta.ExibirErros();
 
                 string novaLeitura = "";
 
-                foreach (var campoInvalido in validadorConsulta.Erros)
+                foreach (var campoInvalido in validadorConsulta.Erros.Where(erro => erro.Value.Count > 0))
                 {
                     Console.Write($"{campoInvalido.Key} :");
                     novaLeitura = Console.ReadLine();

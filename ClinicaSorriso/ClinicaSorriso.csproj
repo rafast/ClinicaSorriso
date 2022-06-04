@@ -49,6 +49,7 @@
     <Compile Include="Repositories\InMemory\ConsultaRepositoryInMemory.cs" />
     <Compile Include="Services\IConsultaService.cs" />
     <Compile Include="Services\ConsultaService.cs" />
+    <Compile Include="Helpers\ValidaDadosConsulta.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
