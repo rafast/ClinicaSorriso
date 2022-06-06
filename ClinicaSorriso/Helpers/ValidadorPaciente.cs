@@ -5,7 +5,8 @@ using System.Text.RegularExpressions;
 
 namespace ClinicaSorriso.Helpers
 {
-    public class ValidadorPaciente
+    //Implementacao da interface de validacao para um Paciente
+    public class ValidadorPaciente : IValidador
     {
         public Dictionary<string,string> erros { get; set; }
         public string Nome { get; set; }
@@ -17,14 +18,17 @@ namespace ClinicaSorriso.Helpers
             Nome = nome;
             Cpf = cpf;
             DtNascimento = dtNascimento;
-            erros = new Dictionary<string, string>();
+            InicializaDicionarioDeErros();
+            ValidarDados();
         }
 
-        public bool IsValid()
+        //Retorna se há alguma campo invalido
+        public bool HasErrors()
         {
-            return erros.Count == 0;
+            return erros.Count > 0;
         }
 
+        //Executa a validacao dos campos de acordo com as regras de negócio da aplicação
         public void ValidarDados()
         {
             erros.Clear();
@@ -44,6 +48,7 @@ namespace ClinicaSorriso.Helpers
             }
         }
 
+        // Imprime o motivo dos campos inválidos
         public void ExibirErros()
         {
             foreach (var erro in erros)
@@ -52,12 +57,14 @@ namespace ClinicaSorriso.Helpers
             }
         }
 
+        //Verifica se um nome possui pelo menos 5 letras e possui apenas letras
         private bool ValidaNome()
         {
             string padrao = "^([a-zA-Z ]*?)\\s*([a-zA-Z]*)$";
             return Regex.IsMatch(Nome, padrao) && (Nome.Length > 4);
         }
 
+        //Verifica se um CPF é válido
         private bool ValidaCPF()
         {
             int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
@@ -131,6 +138,7 @@ namespace ClinicaSorriso.Helpers
             }
         }
 
+        //Verifica se uma data está no formato correto
         private bool ValidaData(out DateTime data)
         {
             return DateTime.TryParseExact(DtNascimento,
@@ -139,5 +147,33 @@ namespace ClinicaSorriso.Helpers
                                          DateTimeStyles.None,
                                          out data);
         }
+
+        //Inicia o processo leitura e validação dos campos que estão inválidos
+        public void IniciaValidacao()
+        {
+            while (HasErrors())
+            {
+                ExibirErros();
+
+                string novaLeitura = "";
+
+                foreach (var campoInvalido in erros)
+                {
+                    Console.Write($"{campoInvalido.Key} :");
+                    novaLeitura = Console.ReadLine();
+                                      GetType()
+                                     .GetProperty(campoInvalido.Key)
+                                     .SetValue(this, novaLeitura);
+                }
+                ValidarDados();
+            }
+        }
+
+        //Inicializa o dicionario de erros
+        public void InicializaDicionarioDeErros()
+        {
+            erros = new Dictionary<string, string>();
+        }
+
     }
 }

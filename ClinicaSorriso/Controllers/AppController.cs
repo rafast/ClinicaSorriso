@@ -1,8 +1,10 @@
 ﻿using System;
+using ClinicaSorriso.Models;
 using ClinicaSorriso.Views;
 
 namespace ClinicaSorriso.Controllers
 {
+    //Classe de controle da excecução da aplicação
     public class AppController
     {
         public PacienteController pacienteController { get; set; }
@@ -45,5 +47,12 @@ namespace ClinicaSorriso.Controllers
 
             }
         }
+
+        public void Run()
+        {
+            MenuView.MenuPrincipal();
+            LerOpcaoUsuario();
+        }
+        
     }
 }

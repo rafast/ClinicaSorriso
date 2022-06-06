@@ -8,10 +8,12 @@ namespace ClinicaSorriso.Services
     public interface IConsultaService
     {
         List<Consulta> ListarConsultas();
-        void CadastrarConsulta(Consulta consulta);
-        void ExcluirConsulta(Consulta consulta, List<string> listaDeDados);
+        List<Consulta> ListarConsultasPorPeriodo(DateTime dtInicio, DateTime dtFim);
         List<Consulta> ListarConsultasDoDia(DateTime data);
-        bool TemChoqueDeHorario(Consulta novaConsulta);
+        Consulta BuscarConsulta(Consulta consulta);
+        void CadastrarConsulta(Consulta consulta);
+        void ExcluirConsulta(Consulta consulta);
+        bool TemConflitoDeHorario(Consulta novaConsulta);
         void ExcluirConsultasDoPaciente(Paciente paciente);
     }
 }

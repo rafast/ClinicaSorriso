@@ -6,6 +6,7 @@ using ClinicaSorriso.Views;
 
 namespace ClinicaSorriso.Controllers
 {
+    //Classe que recebe e envia os dados ConsultaView e interage com o model Consulta e Paciente, e os servicos da aplicação
     public class ConsultaController
     {
         private PacienteService _pacienteService { get; set; }
@@ -15,9 +16,9 @@ namespace ClinicaSorriso.Controllers
         {
             _consultaService = consultaService;
             _pacienteService = pacienteService;
-            PopularAgenda();
         }
 
+        // Obtém a opção selecionada pelo usuario no Menu da Agenda e executa a respectiva funcionalidade
         public void LeituraOpcao()
         {
             bool exit = false;
@@ -52,74 +53,79 @@ namespace ClinicaSorriso.Controllers
 
             }
         }
+
+        // Executa a lógica de agendamento de uma consulta
         public void Cadastrar()
         {
-            try
-            {
-                var pacienteSalvo = _pacienteService.ConsultarPacientePorCPF(PacienteView.ConsultarCpf());
-                if (pacienteSalvo == null)
-                {
-                    PacienteView.MensagemErro("paciente não cadastrado.");
-                    return;
-                }
-   
-                if (pacienteSalvo.TemConsultaFutura())
-                {
-                    PacienteView.MensagemErro($" o paciente já possui consulta marcada para:" +
-                        $"{pacienteSalvo.ConsultaMarcada.Data.ToString("dd/MM/yyyy")}");
-                    return;
-                }
-
-                var dadosConsulta = ConsultaView.Cadastrar();
-                var novaConsulta = new Consulta(pacienteSalvo, DateTime.Parse(dadosConsulta[0]), dadosConsulta[1], dadosConsulta[2]);
-                
-                var temChoqueDehorario = _consultaService.TemChoqueDeHorario(novaConsulta);                 
-
-                _consultaService.CadastrarConsulta(novaConsulta);
-                pacienteSalvo.MarcarConsulta(novaConsulta);
-                ConsultaView.AgendamentoRealizado();
-            }
-            catch (ArgumentException ex)
-            {
-                ConsultaView.MensagemErro(ex.Message);
-            }
-            catch (ApplicationException ex)
-            {
-                ConsultaView.MensagemErro(ex.Message);
-            }
-        }
-
-        public void Excluir()
-        {
-            var pacienteConsulta = _pacienteService.ConsultarPacientePorCPF(PacienteView.ConsultarCpf());
-            if (pacienteConsulta == null)
+            var pacienteExistente = _pacienteService.ConsultarPacientePorCPF(PacienteView.ConsultarCpf());
+            if (pacienteExistente is null)
             {
                 PacienteView.MensagemErro("paciente não cadastrado.");
                 return;
             }
-            if (!pacienteConsulta.TemConsultaFutura())
+   
+            if (pacienteExistente.TemConsultaFutura())
             {
-                PacienteView.MensagemErro("O paciente não possui consulta futura marcada!");
+                string mensagemErro = $" o paciente já possui consulta marcada para " +
+                    $"{pacienteExistente.ConsultaMarcada.Data:dd/MM/yyyy} as " +
+                    $"{pacienteExistente.ConsultaMarcada.HoraInicio}h";
+
+                PacienteView.MensagemErro(mensagemErro);
                 return;
             }
-            var consulta = pacienteConsulta.ConsultaMarcada;
-            var listaDeDados = ConsultaView.Excluir();
-            try
+
+            var dadosConsulta = ConsultaView.ObterDadosConsulta();
+
+            var novaConsulta = new Consulta(pacienteExistente,
+                                            DateTime.Parse(dadosConsulta.DataConsulta),
+                                            dadosConsulta.HoraInicio,
+                                            dadosConsulta.HoraFim);
+                
+            if (_consultaService.TemConflitoDeHorario(novaConsulta))
             {
-                _consultaService.ExcluirConsulta(consulta, listaDeDados);
-                pacienteConsulta.CancelarConsulta();
-                ConsultaView.ConsultaExcluida();
+                PacienteView.MensagemErro("já existe uma consulta agendada nesta data/hora.");
+                return;
             }
-            catch(ArgumentException ex)
+            else
             {
-                ConsultaView.MensagemErro(ex.Message);
+                _consultaService.CadastrarConsulta(novaConsulta);
+                pacienteExistente.MarcarConsulta(novaConsulta);
+                ConsultaView.AgendamentoRealizado();
             }
-            catch (ApplicationException ex)
-            {
-                ConsultaView.MensagemErro(ex.Message);
-            }
+               
         }
 
+        // Executa a lógica de cancelamento de uma consulta
+        public void Excluir()
+        {
+            var pacienteExistente = _pacienteService.ConsultarPacientePorCPF(PacienteView.ConsultarCpf());
+            if (pacienteExistente is null)
+            {
+                PacienteView.MensagemErro("paciente não cadastrado.");
+                return;
+            }
+
+            var dadosConsulta = ConsultaView.ObterDadosConsulta();
+
+            var consultaExcluir = new Consulta(pacienteExistente,
+                                            DateTime.Parse(dadosConsulta.DataConsulta),
+                                            dadosConsulta.HoraInicio,
+                                            dadosConsulta.HoraFim);
+
+            var consultaExistente = _consultaService.BuscarConsulta(consultaExcluir);
+
+            if (consultaExistente is null)
+            {
+                ConsultaView.MensagemErro("agendamento não encontrado.");
+                return;
+            }
+
+            _consultaService.ExcluirConsulta(consultaExistente);
+            pacienteExistente.CancelarConsulta();
+            ConsultaView.ConsultaExcluida();            
+        }
+
+        //Obtem o tipo de listagem escolhida e passa para a View a lista correspondente
         public void ListarAgenda()
         {
             var opcaoListagem = ConsultaView.ObterOpcaoListagem();
@@ -128,21 +134,15 @@ namespace ClinicaSorriso.Controllers
             {
                 ConsultaView.ListarAgenda(_consultaService.ListarConsultas());
             }
-            if (opcaoListagem == 'P')
+            if (opcaoListagem == 'P' || opcaoListagem == 'p')
             {
-
+                var datasPeriodo = ConsultaView.ObterPeriodoListagem();
+                ConsultaView.ListarAgenda(_consultaService.ListarConsultasPorPeriodo(datasPeriodo[0], datasPeriodo[1]));
             }
             else
             {
                 Console.WriteLine();
             }
-        }
-
-        private void PopularAgenda()
-        {
-            _consultaService.CadastrarConsulta(new Consulta(_pacienteService.ConsultarPacientePorCPF("39401787050"), Convert.ToDateTime("15/05/2022 "), "08:00", "09:00"));
-            _consultaService.CadastrarConsulta(new Consulta(_pacienteService.ConsultarPacientePorCPF("80519936086"), Convert.ToDateTime("15/06/2022"), "10:15", "11:00"));
-            _consultaService.CadastrarConsulta(new Consulta(_pacienteService.ConsultarPacientePorCPF("91490575022"), Convert.ToDateTime("15/06/2022"), "13:45", "15:00"));
         }
 
     }

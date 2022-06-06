@@ -6,7 +6,8 @@ using System.Text.RegularExpressions;
 
 namespace ClinicaSorriso.Helpers
 {
-    public class ValidaDadosConsulta
+    //Implementacao da interface de validacao para criar e excluir uma consulta
+    public class ValidaDadosConsulta : IValidador
     {
         public string DataConsulta { get; set; }
         public string HoraInicio { get; set; }
@@ -17,10 +18,12 @@ namespace ClinicaSorriso.Helpers
         {
             DataConsulta = dataConsulta;
             HoraInicio = horaInicio;
-            HoraFim = horaFim;            
+            HoraFim = horaFim;
+            ValidarDados();
         }
 
-        private void InicializaDicionarioDeErros()
+        //Inicializa o dicionario de erros
+        public void InicializaDicionarioDeErros()
         {
             Erros = new Dictionary<string, List<string>>
             {
@@ -30,11 +33,13 @@ namespace ClinicaSorriso.Helpers
             };
         }
 
+        //Retorna se há algum campo inválido
         public bool HasErrors()
         {
             return Erros.Values.Where(listaErros => listaErros.Count > 0).Any();
         }
 
+        //Realiza a validação dos campos
         public void ValidarDados()
         {
             InicializaDicionarioDeErros();
@@ -46,21 +51,27 @@ namespace ClinicaSorriso.Helpers
             ValidaHoraFim();
         }
 
-        private bool IsFormatoDataValido(out DateTime data)
+        //Verifica se a data está no formato válido
+        private bool IsFormatoDataValido(string data, out DateTime dataValida)
         {
-            return DateTime.TryParseExact(DataConsulta,
+            var tamanhoValido = data.Length == 10;
+            var formatoValido = DateTime.TryParseExact(data,
                                          "dd/MM/yyyy",
                                          CultureInfo.InvariantCulture,
                                          DateTimeStyles.None,
-                                         out data);            
+                                         out dataValida);
+
+            return tamanhoValido & formatoValido;
         }
 
+        //Verifica se o horario está no formato válido
         private bool IsFormatoHorarioValido(string horario)
         {
             string padrao = "^(0[8,9]|1[0-8])([0,3]0|[1,4]5)$";
             return Regex.IsMatch(horario, padrao);
         }
 
+        //Imprime os campos inválidos e os seus respectivos erros
         public void ExibirErros()
         {
             foreach (var campo in Erros)
@@ -75,6 +86,7 @@ namespace ClinicaSorriso.Helpers
             }
         }
 
+        //Verifica se o horario final é posterior ao inicial
         public bool IsHoraFimPosteriorHoraInicio()
         {
             int.TryParse(HoraFim, out int intHoraFim);
@@ -82,6 +94,7 @@ namespace ClinicaSorriso.Helpers
             return intHoraFim > intHoraInicio;
         }
 
+        //Verifica se a hora inicial é posterior à hora atual do agendamento
         public bool IsHoraInicioPosteriorHoraAtual()
         {
             int.TryParse(HoraInicio.Substring(0,2), out int intHoras);
@@ -91,20 +104,23 @@ namespace ClinicaSorriso.Helpers
             return horaInicioTimeSpan > horaAtualTimeSpan;
         }
 
+        //Retorna se uma data é futura ou não
         private bool IsDataFutura(DateTime data)
         {
             return data.Date >= DateTime.Now.Date;
         }
 
+        //Retorna se a consulta está sendo agendada pro mesmo dia
         private bool IsDataIgualHoje()
         {
             var dataAgendamento = DateTime.Parse(DataConsulta);
             return dataAgendamento.Date == DateTime.Now.Date;
         }
 
+        //Executa todas as validações para a data da consulta
         private void ValidaDataConsulta()
         {
-            if (!IsFormatoDataValido(out DateTime dataValida))
+            if (!IsFormatoDataValido(DataConsulta, out DateTime dataValida))
             {
                 Erros["DataConsulta"].Add("Data inválida. Deve ser informada no formato DD/MM/AAAA");
             }
@@ -115,6 +131,7 @@ namespace ClinicaSorriso.Helpers
             }
         }
 
+        //Executa todas as validações para a hora inicial
         private void ValidaHoraInicio()
         {
             if (!IsFormatoHorarioValido(HoraInicio))
@@ -130,6 +147,7 @@ namespace ClinicaSorriso.Helpers
 
         }
 
+        //Executa todas as validações para a hora final
         private void ValidaHoraFim()
         {
             if (!IsFormatoHorarioValido(HoraFim))
@@ -146,5 +164,25 @@ namespace ClinicaSorriso.Helpers
             }
         }
 
+        //Inicia o processo leitura e validação dos campos que estão inválidos
+        public void IniciaValidacao()
+        {
+            while (HasErrors())
+            {
+                ExibirErros();
+
+                string novaLeitura = "";
+
+                foreach (var campoInvalido in Erros.Where(erro => erro.Value.Count > 0))
+                {
+                    Console.Write($"{campoInvalido.Key} :");
+                    novaLeitura = Console.ReadLine();
+                    GetType()
+                            .GetProperty(campoInvalido.Key)
+                            .SetValue(this, novaLeitura);
+                }
+                ValidarDados();
+            }
+        }
     }
 }

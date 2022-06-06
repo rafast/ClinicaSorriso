@@ -3,6 +3,7 @@ using System.Globalization;
 
 namespace ClinicaSorriso.Models
 {
+    // Classe que representa uma consulta na aplicação
     public class Consulta
     {
         public Paciente Paciente { get; set; }
@@ -18,56 +19,31 @@ namespace ClinicaSorriso.Models
             HoraInicio = horaInicio;
             HoraFim = horaFim;
             TempoDeConsulta = GetTempoDeConsulta();
-            paciente.MarcarConsulta(this);
-            FormataHorario();
-        }
-        public bool TemChoqueDeHorario(Consulta consulta)
-        {
-            string horaInicio = RemovePonto(HoraInicio);
-            string horaFim = RemovePonto(HoraFim);
-            string consultaHoraInicio = RemovePonto(consulta.HoraInicio);
-            string consultaHoraFim = RemovePonto(consulta.HoraFim);
-
-            return !(double.Parse(horaInicio) > double.Parse(consultaHoraFim) || double.Parse(horaFim) < double.Parse(consultaHoraInicio));
-        }
-        private void FormataHorario()
-        {
-            if (!(HoraInicio.Contains(":") && HoraFim.Contains(":")))
-            {
-                HoraInicio = HoraInicio.Insert(2, ":");
-                HoraFim = HoraFim.Insert(2, ":");
-            }
         }
 
+        //Recebe uma consulta e retorna se há um conflito de horário com a mesma
+        public bool TemConflitoDeHorario(Consulta consulta)
+        {
+            int.TryParse(HoraInicio, out int horaInicio);
+            int.TryParse(HoraFim, out int horaFim);
+            int.TryParse(consulta.HoraInicio, out int consultaHoraInicio);
+            int.TryParse(consulta.HoraFim, out int consultaHoraFim);
+
+            return !(horaInicio >= consultaHoraFim || horaFim <= consultaHoraInicio);
+        }        
+
+        //Retorna a duração da consulta
         private TimeSpan GetTempoDeConsulta()
         {
-            string hrInicio = HoraInicio;
-            string hrFim = HoraFim;
-
-            if(HoraInicio.Contains(":") && HoraFim.Contains(":"))
-            {
-                hrInicio = HoraInicio.Replace(":", "");
-                hrFim = HoraFim.Replace(":", "");
-
-            }
-            DateTime dtHoraInicio = RetornaDt(hrInicio);
-            DateTime dtHoraFim = RetornaDt(hrFim);
-            TimeSpan duration = dtHoraFim.Subtract(dtHoraInicio);
-            return duration;
+            var horaInicio = new TimeSpan(int.Parse(HoraInicio.Substring(0,2)), int.Parse(HoraInicio.Substring(2)), 0);
+            var horaFim = new TimeSpan(int.Parse(HoraFim.Substring(0, 2)), int.Parse(HoraFim.Substring(2)), 0);
+            return horaFim - horaInicio;
         
         }
-        private DateTime RetornaDt(string str)
-        {
-            string horarioGeral = str;
-            string hora = horarioGeral.Substring(0, 2);
-            string minuto = horarioGeral.Substring(2, 2);
-            DateTime data = Data.AddHours(double.Parse(hora)).AddMinutes(double.Parse(minuto));
-            return data;
-        }
 
-        private string RemovePonto(string str)
+        public string GetHorario(string horarioStr)
         {
-            return str.Replace(":", "");          
+            return horarioStr.Insert(2, ":");
         }
         
     }
