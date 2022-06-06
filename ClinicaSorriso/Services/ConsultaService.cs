@@ -1,5 +1,4 @@
-﻿
-using ClinicaSorriso.Models;
+﻿using ClinicaSorriso.Models;
 using ClinicaSorriso.Repositories.InMemory;
 using System;
 using System.Collections.Generic;
