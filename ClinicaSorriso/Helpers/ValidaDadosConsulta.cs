@@ -97,11 +97,15 @@ namespace ClinicaSorriso.Helpers
         //Verifica se a hora inicial é posterior à hora atual do agendamento
         public bool IsHoraInicioPosteriorHoraAtual()
         {
-            int.TryParse(HoraInicio.Substring(0,2), out int intHoras);
-            int.TryParse(HoraInicio.Substring(2), out int intMinutos);
-            var horaInicioTimeSpan = new TimeSpan(intHoras, intMinutos, 0);
-            var horaAtualTimeSpan = DateTime.Now.TimeOfDay;
-            return horaInicioTimeSpan > horaAtualTimeSpan;
+            if(HoraInicio.Length == 4)
+            {
+                int.TryParse(HoraInicio.Substring(0, 2), out int intHoras);
+                int.TryParse(HoraInicio.Substring(2), out int intMinutos);
+                var horaInicioTimeSpan = new TimeSpan(intHoras, intMinutos, 0);
+                var horaAtualTimeSpan = DateTime.Now.TimeOfDay;
+                return horaInicioTimeSpan > horaAtualTimeSpan;
+            }
+            return false;
         }
 
         //Retorna se uma data é futura ou não
@@ -113,8 +117,17 @@ namespace ClinicaSorriso.Helpers
         //Retorna se a consulta está sendo agendada pro mesmo dia
         private bool IsDataIgualHoje()
         {
-            var dataAgendamento = DateTime.Parse(DataConsulta);
-            return dataAgendamento.Date == DateTime.Now.Date;
+            DateTime data;
+            bool dataConvertida = DateTime.TryParseExact(DataConsulta,"dd/MM/yyyy",
+                                         CultureInfo.InvariantCulture,
+                                         DateTimeStyles.None, out data);
+            if (dataConvertida)
+            {
+                var dataAgendamento = DateTime.Parse(DataConsulta);
+                return dataAgendamento.Date == DateTime.Now.Date;
+            }
+            return dataConvertida;
+            
         }
 
         //Executa todas as validações para a data da consulta
