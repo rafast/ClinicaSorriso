@@ -6,6 +6,7 @@ using ClinicaSorriso.Models;
 
 namespace ClinicaSorriso.Views
 {
+    // Classe responsável por exibir e ler informações referentes ao Paciente
     public static class PacienteView
     {        
 
@@ -39,24 +40,7 @@ namespace ClinicaSorriso.Views
             string inputDtNascimento = Console.ReadLine();
 
             var validadorPaciente = new ValidadorPaciente(inputNome, inputCpf, inputDtNascimento);
-            validadorPaciente.ValidarDados();
-
-            while (!validadorPaciente.IsValid())
-            {
-                validadorPaciente.ExibirErros();
-
-                string novaLeitura = "";
-
-                foreach (var campoInvalido in validadorPaciente.erros)
-                {
-                    Console.Write($"{campoInvalido.Key} :");
-                    novaLeitura = Console.ReadLine();
-                    validadorPaciente.GetType()
-                                     .GetProperty(campoInvalido.Key)
-                                     .SetValue(validadorPaciente, novaLeitura);
-                }
-                validadorPaciente.ValidarDados();
-            }
+            validadorPaciente.IniciaValidacao();
 
             return new Paciente(validadorPaciente.Nome, validadorPaciente.Cpf, Convert.ToDateTime(validadorPaciente.DtNascimento));
         }
@@ -96,7 +80,7 @@ namespace ClinicaSorriso.Views
                 if (paciente.TemConsultaFutura())
                 {
                     Console.WriteLine(String.Format("{0,-11} {1,-12} ", " ", $"Agendado para: {paciente.ConsultaMarcada.Data.ToString("dd/MM/yyyy")}"));
-                    Console.WriteLine(String.Format("{0,-11} {1,-12} ", " ", $"{paciente.ConsultaMarcada.HoraInicio} às {paciente.ConsultaMarcada.HoraFim}"));
+                    Console.WriteLine(String.Format("{0,-11} {1,-12} ", " ", $"{paciente.ConsultaMarcada.GetHorario(paciente.ConsultaMarcada.HoraInicio)} às {paciente.ConsultaMarcada.GetHorario(paciente.ConsultaMarcada.HoraFim)}"));
                 }
             }
         }

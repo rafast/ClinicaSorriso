@@ -2,11 +2,14 @@
 using ClinicaSorriso.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ClinicaSorriso.Views
 {
+    // Classe responsável por exibir e ler informações referentes as consultas
     public static class ConsultaView
     {
+        // Exibe o layout do menu da agenda
         public static void MenuAgenda()
         {
             Console.WriteLine("Agenda");
@@ -15,59 +18,31 @@ namespace ClinicaSorriso.Views
             Console.WriteLine("3-Listar agenda");
             Console.WriteLine("4-Voltar p/ menu principal");
         }
-        public static List<string> Cadastrar()
-        {  
-            List<string> DadosValidados = new List<string>();
 
+        // Faz a leitura e validação dos dados necessários para agendar uma consulta
+        public static ValidaDadosConsulta ObterDadosConsulta()
+        {  
             Console.Write("Data da consulta: ");
             string inputData = Console.ReadLine();    
-            Console.Write("Horário do inicio da consulta(HH/mm): ");
+            Console.Write("Hora inicial: ");
             string inputHrInicio = Console.ReadLine();
-            Console.Write("Horário do término da consulta(HH/mm): ");
+            Console.Write("Hora final: ");
             string inputHrFinal = Console.ReadLine();
 
-            var validadorConsulta = new ValidadorConsulta(inputData, inputHrInicio, inputHrFinal);
-            validadorConsulta.ValidarDados();
 
-            while (!validadorConsulta.IsValid())
-            {
-                validadorConsulta.ExibirErros();
+            var validadorConsulta = new ValidaDadosConsulta(inputData, inputHrInicio, inputHrFinal);
+            validadorConsulta.IniciaValidacao();          
 
-                string novaLeitura = "";
-
-                foreach (var campoInvalido in validadorConsulta.Erros)
-                {
-                    Console.Write($"{campoInvalido.Key} :");
-                    novaLeitura = Console.ReadLine();
-                    validadorConsulta.GetType()
-                                     .GetProperty(campoInvalido.Key)
-                                     .SetValue(validadorConsulta, novaLeitura);
-                }
-                validadorConsulta.ValidarDados();
-            }
-            DadosValidados.Add(validadorConsulta.DataConsulta.ToString());
-            DadosValidados.Add(validadorConsulta.HoraInicio);
-            DadosValidados.Add(validadorConsulta.HoraFim);
-            return DadosValidados;
+            return validadorConsulta;
         }
-        public static List<string> Excluir()
-        {
-            List<string> listaDeDados = new List<string>();
-            Console.WriteLine("Data da consulta: ");
-            string inputData = Console.ReadLine();
-            Console.Write("Hora inicial: ");
-            string inputHora = Console.ReadLine();
-            listaDeDados.Add(inputData);
-            listaDeDados.Add(inputHora);
 
-            return listaDeDados;
-        }
+        // Exibe mensagem de consulta agendada com sucesso
         public static void AgendamentoRealizado()
         {
             Console.WriteLine("Agendamento realizado com sucesso!");
         }
 
-        // Exibe mensagem de cadastro excluído com sucesso
+        // Exibe mensagem de consulta excluída com sucesso
         public static void ConsultaExcluida()
         {
             Console.WriteLine("Consulta excluída com sucesso!");
@@ -79,6 +54,7 @@ namespace ClinicaSorriso.Views
             Console.WriteLine($"Erro: {msg}");
         }
 
+        //Faz a leitura da opcao de listagem da agenda
         public static char ObterOpcaoListagem()
         {
             Console.Write("Apresentar a agenda T-Toda ou P-Periodo: ");
@@ -86,6 +62,28 @@ namespace ClinicaSorriso.Views
             return inputOpcaoListagem.KeyChar;
         }
 
+        //Faz a leitura e validacao das datas para listagem da agenda por periodo
+        public static DateTime[] ObterPeriodoListagem()
+        {
+            Console.Write("Data inicial: ");
+            string inputDtInicio = Console.ReadLine();
+            Console.Write("Data final: ");
+            string inputDtFinal = Console.ReadLine();
+
+            var ValidadorDatas = new ValidadorDatas(inputDtInicio, inputDtFinal);
+
+            ValidadorDatas.IniciaValidacao();
+
+            var datasPeriodo = new DateTime[]
+            {
+                DateTime.Parse(ValidadorDatas.DataInicio),
+                DateTime.Parse(ValidadorDatas.DataFim)
+            };
+
+            return datasPeriodo;
+        }
+
+        // Recebe uma lista de consultas agendadas e imprime o layout da listagem da agenda
         public static void ListarAgenda(List<Consulta> agenda)
         {
             if (agenda.Count == 0)
@@ -99,7 +97,7 @@ namespace ClinicaSorriso.Views
             
             foreach (var consulta in agenda)
             {
-                Console.WriteLine(String.Format("{0,-10} {1,0} {2, 0} {3, 5} {4, -20} {5, 1}", consulta.Data.ToString("dd/MM/yyyy"), consulta.HoraInicio, consulta.HoraFim, consulta.TempoDeConsulta.ToString(@"hh\:mm"),
+                Console.WriteLine(String.Format("{0,-10} {1,0} {2, 0} {3, 5} {4, -20} {5, 1}", consulta.Data.ToString("dd/MM/yyyy"), consulta.GetHorario(consulta.HoraInicio), consulta.GetHorario(consulta.HoraFim), consulta.TempoDeConsulta.ToString(@"hh\:mm"),
                                         consulta.Paciente.Nome,
                                         consulta.Paciente.DataNascimento.ToString("dd/MM/yyyy")));
             }

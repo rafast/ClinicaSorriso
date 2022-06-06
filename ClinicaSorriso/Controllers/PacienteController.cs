@@ -4,6 +4,7 @@ using ClinicaSorriso.Views;
 
 namespace ClinicaSorriso.Controllers
 {
+    //Classe que recebe e envia os dados PacienteView e interage com o model Paciente e os servicos da aplicação
     public class PacienteController
     {
         private PacienteService _pacienteService { get; set; }
