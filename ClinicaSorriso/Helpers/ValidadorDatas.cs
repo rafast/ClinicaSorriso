@@ -114,9 +114,10 @@ namespace ClinicaSorriso.Helpers
                                          "dd/MM/yyyy",
                                          CultureInfo.InvariantCulture,
                                          DateTimeStyles.None,
-                                         out dataValida);
-
-            return tamanhoValido & formatoValido;
+                                         out dataValida);      
+             
+            return tamanhoValido && formatoValido;
+            
         }
 
         //Verifica se a data é posterior
