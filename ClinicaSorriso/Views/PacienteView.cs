@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ClinicaSorriso.Controllers;
 using ClinicaSorriso.Helpers;
 using ClinicaSorriso.Models;
 

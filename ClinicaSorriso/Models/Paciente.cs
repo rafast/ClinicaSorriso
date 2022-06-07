@@ -46,7 +46,7 @@ namespace ClinicaSorriso.Models
         {
             if (ConsultaMarcada != null)
             {
-                return ConsultaMarcada.Data > DateTime.Now;
+                return ConsultaMarcada.Data.Date >= DateTime.Now.Date;
             }
             return false;
         }

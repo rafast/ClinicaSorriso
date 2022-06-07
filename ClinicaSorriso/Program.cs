@@ -1,6 +1,4 @@
-﻿using System;
-using ClinicaSorriso.Controllers;
-using ClinicaSorriso.Views;
+﻿using ClinicaSorriso.Controllers;
 using ClinicaSorriso.Services;
 using ClinicaSorriso.Repositories.InMemory;
 

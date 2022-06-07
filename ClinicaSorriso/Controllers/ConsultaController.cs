@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using ClinicaSorriso.Models;
 using ClinicaSorriso.Services;
 using ClinicaSorriso.Views;
@@ -68,7 +67,7 @@ namespace ClinicaSorriso.Controllers
             {
                 string mensagemErro = $" o paciente já possui consulta marcada para " +
                     $"{pacienteExistente.ConsultaMarcada.Data:dd/MM/yyyy} as " +
-                    $"{pacienteExistente.ConsultaMarcada.HoraInicio}h";
+                    $"{pacienteExistente.ConsultaMarcada.GetHorario(pacienteExistente.ConsultaMarcada.HoraInicio)}h";
 
                 PacienteView.MensagemErro(mensagemErro);
                 return;

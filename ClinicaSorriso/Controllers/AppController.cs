@@ -1,5 +1,4 @@
 ﻿using System;
-using ClinicaSorriso.Models;
 using ClinicaSorriso.Views;
 
 namespace ClinicaSorriso.Controllers

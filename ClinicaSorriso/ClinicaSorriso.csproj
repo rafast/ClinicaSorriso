@@ -45,7 +45,6 @@
     <Compile Include="Services\IPacienteService.cs" />
     <Compile Include="Repositories\InMemory\PacientesRepositoryInMemory.cs" />
     <Compile Include="Services\PacienteService.cs" />
-    <Compile Include="Helpers\ValidadorConsulta.cs" />
     <Compile Include="Repositories\InMemory\ConsultaRepositoryInMemory.cs" />
     <Compile Include="Services\IConsultaService.cs" />
     <Compile Include="Services\ConsultaService.cs" />

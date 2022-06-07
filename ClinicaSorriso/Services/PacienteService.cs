@@ -51,7 +51,7 @@ namespace ClinicaSorriso.Services
 
             if (paciente.TemConsultaFutura())
             {
-                throw new ApplicationException($"paciente está agendado para {paciente.ConsultaMarcada.Data.ToString("dd / MM / yyyy")} as {paciente.ConsultaMarcada.HoraInicio}h.");
+                throw new ApplicationException($"paciente está agendado para {paciente.ConsultaMarcada.Data:dd/MM/yyyy} as {paciente.ConsultaMarcada.GetHorario(paciente.ConsultaMarcada.HoraInicio)}h.");
             }
             _pacientesRepository.Deletar(paciente);
         }

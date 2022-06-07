@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 
 namespace ClinicaSorriso.Models
 {
@@ -41,6 +40,7 @@ namespace ClinicaSorriso.Models
         
         }
 
+        //Retorna o horário no formato HH:MM
         public string GetHorario(string horarioStr)
         {
             return horarioStr.Insert(2, ":");
