@@ -1,9 +1,11 @@
 ﻿using System;
 namespace ClinicaSorriso.Views
 {
+    // Classe responsável por exibir o Menu Principal
     public static class MenuView
     {
 
+        //Exibe o menu principal da aplicação
         public static void MenuPrincipal()
         {
             Console.WriteLine("Menu Principal");

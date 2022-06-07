@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -45,15 +45,14 @@
     <Compile Include="Services\IPacienteService.cs" />
     <Compile Include="Repositories\InMemory\PacientesRepositoryInMemory.cs" />
     <Compile Include="Services\PacienteService.cs" />
+    <Compile Include="Repositories\InMemory\ConsultaRepositoryInMemory.cs" />
+    <Compile Include="Services\IConsultaService.cs" />
+    <Compile Include="Services\ConsultaService.cs" />
+    <Compile Include="Helpers\ValidaDadosConsulta.cs" />
+    <Compile Include="Helpers\ValidadorDatas.cs" />
+    <Compile Include="Helpers\IValidador.cs" />
+    <Compile Include="SeedRepositories.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Views\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Services\" />
-    <Folder Include="Repositories\InMemory\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
